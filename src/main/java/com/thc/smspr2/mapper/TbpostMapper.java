@@ -1,13 +1,10 @@
-package com.thc.smspr2.service;
-
+package com.thc.smspr2.mapper;
 
 import com.thc.smspr2.dto.TbpostDto;
 
 import java.util.List;
 
-public interface TbpostService {
-    TbpostDto.CreateResDto create(TbpostDto.CreateReqDto param);
-    TbpostDto.CreateResDto update(TbpostDto.UpdateReqDto param);
+public interface TbpostMapper {
     TbpostDto.SelectResDto detail(TbpostDto.SelectReqDto param);
     List<TbpostDto.SelectResDto> list(TbpostDto.ListReqDto param);
 }

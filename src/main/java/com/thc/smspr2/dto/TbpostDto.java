@@ -69,7 +69,6 @@ public class TbpostDto {
 
     }
 
-
     @Builder
     @Schema
     @Getter
@@ -82,21 +81,31 @@ public class TbpostDto {
         @NotEmpty
         private String id;
     }
+    @Schema
+    @Getter
+    @Setter
+    public static class SelectResDto{
+        private String id;
+        private String deleted;
+        private String process;
+        private String createdAt;
+        private String modifiedAt;
+
+        private String title;
+        private String author;
+        private String content;
+    }
+
     @Builder
     @Schema
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SelectResDto{
-        private String id;
-        private String deleted;
-        private String process;
-        private String createdAt;
-        private String modifieddAt;
-
+    public static class ListReqDto{
+        @Schema(description = "title", example="")
         private String title;
+        @Schema(description = "author", example="")
         private String author;
-        private String content;
     }
 }

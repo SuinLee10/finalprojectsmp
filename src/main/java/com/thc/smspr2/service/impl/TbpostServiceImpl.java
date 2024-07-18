@@ -2,41 +2,33 @@ package com.thc.smspr2.service.impl;
 
 import com.thc.smspr2.domain.Tbpost;
 import com.thc.smspr2.dto.TbpostDto;
+import com.thc.smspr2.mapper.TbpostMapper;
 import com.thc.smspr2.repository.TbpostRepository;
 import com.thc.smspr2.service.TbpostService;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TbpostServiceImpl implements TbpostService {
 
     private TbpostRepository tbpostRepository;
-    public TbpostServiceImpl(TbpostRepository tbpostRepository) {
+    private TbpostMapper tbpostMapper;
+    public TbpostServiceImpl(
+            TbpostRepository tbpostRepository
+            ,TbpostMapper tbpostMapper
+    ) {
         this.tbpostRepository = tbpostRepository;
+        this.tbpostMapper = tbpostMapper;
     }
 
+    @Override
     public TbpostDto.CreateResDto create(TbpostDto.CreateReqDto param){
-        //1번 방법
-        /*Tbpost tbpost = new Tbpost();
-        tbpost.setTitle(param.getTitle());
-        tbpost.setAuthor(param.getAuthor());
-        tbpost.setContent(param.getContent());
-
-        tbpostRepository.save(tbpost);*/
-
-        //2번 방법
-        Tbpost tbpost = tbpostRepository.save(param.toEntity());
-
-        /*
-        //리턴 1번 방법
-        TbpostDto.CreateResDto createResDto1 = new TbpostDto.CreateResDto();
-        createResDto1.setId(tbpost.getId());
-
-        //리턴 2번 방법
-        TbpostDto.CreateResDto createResDto = tbpost.toCreateResDto();
-        */
-        return tbpost.toCreateResDto();
+        return tbpostRepository.save(param.toEntity()).toCreateResDto();
     }
 
+    @Override
     public TbpostDto.CreateResDto update(TbpostDto.UpdateReqDto param){
         Tbpost tbpost = tbpostRepository.findById(param.getId()).orElseThrow(()->new RuntimeException("no data"));
         if(param.getTitle() != null){
@@ -52,9 +44,12 @@ public class TbpostServiceImpl implements TbpostService {
         return tbpost.toCreateResDto();
     }
 
+    @Override
     public TbpostDto.SelectResDto detail(TbpostDto.SelectReqDto param){
+        //1번 방법
+        /*
         Tbpost tbpost = tbpostRepository.findById(param.getId()).orElseThrow(()->new RuntimeException("no data"));
-        TbpostDto.SelectResDto selectResDto = TbpostDto.SelectResDto.builder()
+        TbpostDto.SelectResDto selectResDto2 = TbpostDto.SelectResDto.builder()
                 .id(tbpost.getId())
                 .createdAt(tbpost.getCreatedAt() + "")
                 .deleted(tbpost.getDeleted())
@@ -62,6 +57,21 @@ public class TbpostServiceImpl implements TbpostService {
                 .author(tbpost.getAuthor())
                 .content(tbpost.getContent())
                 .build();
+        */
+
+        //2번 방법
+        TbpostDto.SelectResDto selectResDto = tbpostMapper.detail(param);
+        if(selectResDto == null){ throw new RuntimeException("no data"); }
         return selectResDto;
+    }
+
+    @Override
+    public List<TbpostDto.SelectResDto> list(TbpostDto.ListReqDto param){
+        List<TbpostDto.SelectResDto> list = tbpostMapper.list(param);
+        List<TbpostDto.SelectResDto> newList = new ArrayList<>();
+        for(TbpostDto.SelectResDto each : list){
+            newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));
+        }
+        return newList;
     }
 }
