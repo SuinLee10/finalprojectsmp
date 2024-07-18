@@ -23,6 +23,12 @@
     var list_info_tbpost_template = Handlebars.compile(list_info_tbpost);
 </script>
 
+deleted :
+<select id="detail_tbpost_deleted">
+    <option value="" selected="selected">전체</option>
+    <option value="N">일반</option>
+    <option value="Y">삭제</option>
+</select>
 title :
 <input id="detail_tbpost_title" type="text" />
 author :
@@ -56,7 +62,8 @@ author :
             type: "GET",
             contentType : 'application/json; charset=utf-8',
             data: {
-                title : $("#detail_tbpost_title").val()
+                deleted : $("#detail_tbpost_deleted").val()
+                , title : $("#detail_tbpost_title").val()
                 , author : $("#detail_tbpost_author").val()
             },
             cache: false,

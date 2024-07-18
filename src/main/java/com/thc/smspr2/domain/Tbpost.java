@@ -38,8 +38,10 @@ public class Tbpost extends AuditingFields {
 
     public TbpostDto.CreateResDto toCreateResDto() {
         //생성자로 리턴해도 되지만!1
+        /*
         TbpostDto.CreateResDto createResDto1 = new TbpostDto.CreateResDto();
         createResDto1.setId(this.getId());
+        */
         //빌더를 쓰면 매우 깔끔!!
         return TbpostDto.CreateResDto.builder().id(this.getId()).build();
     }

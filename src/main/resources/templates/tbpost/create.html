@@ -15,6 +15,7 @@ content :
 <input type="text" id="create_tbpost_content" />
 
 <button onclick="create_tbpost()">create</button>
+<a href="/tbpost/list">link to list</a>
 
 <script>
     function create_tbpost(){
@@ -29,8 +30,8 @@ content :
             }),
             cache: false,
             success: (data, status, xhr)=>{
-                //alert("success!!");
-                alert(JSON.stringify(data));
+                alert("success!!");
+                //alert(JSON.stringify(data));
             },
             error: (data, status, xhr)=>{
                 alert("error!!");

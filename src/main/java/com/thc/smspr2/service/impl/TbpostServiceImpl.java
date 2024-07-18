@@ -68,6 +68,8 @@ public class TbpostServiceImpl implements TbpostService {
     @Override
     public List<TbpostDto.SelectResDto> list(TbpostDto.ListReqDto param){
         List<TbpostDto.SelectResDto> list = tbpostMapper.list(param);
+        //그냥 리스트만 넘기지 않고, detail 에서 상세 정보를 가져옴
+        //return list;
         List<TbpostDto.SelectResDto> newList = new ArrayList<>();
         for(TbpostDto.SelectResDto each : list){
             newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));

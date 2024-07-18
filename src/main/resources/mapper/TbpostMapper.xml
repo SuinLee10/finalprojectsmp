@@ -20,6 +20,7 @@
 		SELECT tbpost.id
 		FROM tbpost
 		WHERE tbpost.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
 		ORDER BY tbpost.created_at DESC

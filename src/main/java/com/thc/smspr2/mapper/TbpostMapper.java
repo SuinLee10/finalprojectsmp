@@ -1,7 +1,6 @@
 package com.thc.smspr2.mapper;
 
 import com.thc.smspr2.dto.TbpostDto;
-
 import java.util.List;
 
 public interface TbpostMapper {

@@ -103,6 +103,8 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ListReqDto{
+        @Schema(description = "deleted", example="")
+        private String deleted;
         @Schema(description = "title", example="")
         private String title;
         @Schema(description = "author", example="")
