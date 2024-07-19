@@ -89,7 +89,7 @@ public class TbpostServiceImpl implements TbpostService {
             orderway = "desc";
         }
         Integer perpage = param.getPerpage();
-        if(perpage == null){
+        if(perpage == null || perpage < 1){
             //한번에 조회할 글 갯수
             perpage = 10;
         }
@@ -111,13 +111,14 @@ public class TbpostServiceImpl implements TbpostService {
         내가 2페이지를 호출한다면 몇번째 부터 보면 될까요?! 11번째 => 10(offset)
         */
         int pagesize = listsize / perpage;
-        if(listsize % perpage != 0){
+        if(listsize % perpage > 0){
             pagesize++;
         }
         if(callpage > pagesize){
             callpage = pagesize;
         }
         int offset = (callpage - 1) * perpage;
+
         param.setOrderby(orderby);
         param.setOrderway(orderway);
         param.setOffset(offset);

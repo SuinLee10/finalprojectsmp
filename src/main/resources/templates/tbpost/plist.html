@@ -43,6 +43,9 @@ author :
     총 페이지 수 : <font class="font_tbpost_pagesize">-</font>
 </div>
 <div>
+    현재 페이지 : <font class="font_tbpost_callpage">-</font>
+</div>
+<div>
     orderby :
     <select id="search_tbpost_orderby" onchange="listener_search_changed(this);">
         <option value="created_at" selected="selected">입력순</option>
@@ -75,6 +78,8 @@ author :
         <tbody id="tbody_tbpost_list">
         </tbody>
     </table>
+    <div id="tfoot_tbpost_page">
+    </div>
 </div>
 <script>
     $( document ).ready(function() {
@@ -83,6 +88,10 @@ author :
     });
 </script>
 <script>
+    function listener_call_page(obj){
+        $("#search_tbpost_callpage").val(obj);
+        plist_tbpost();
+    }
     function listener_search_changed(obj){
         let temp_id = $(obj).attr("id");
         let temp_val = $(obj).val();
@@ -107,6 +116,29 @@ author :
             success: (data, status, xhr)=>{
                 //alert("success!!");
                 //alert(JSON.stringify(data));
+
+                $("#search_tbpost_callpage").val(data["callpage"]);
+                $(".font_tbpost_callpage").html(data["callpage"]);
+
+                $("#tfoot_tbpost_page").html("");
+                let callpage = Number(data["callpage"]);
+                let pagesize = Number(data["pagesize"]);
+                $("#tfoot_tbpost_page").append("<a href='javascript:listener_call_page("+callpage+")'>"+callpage+"</a>");
+                for(let i=0;i<5;i++){
+                    let before_page = (callpage - i - 1);
+                    if(before_page > 0){
+                        $("#tfoot_tbpost_page").prepend("<a href='javascript:listener_call_page("+before_page+")'>"+before_page+"</a>");
+                    }
+                }
+                $("#tfoot_tbpost_page").prepend("<a href='javascript:listener_call_page("+1+")'>맨앞페이지</a>");
+
+                for(let i=0;i<5;i++){
+                    let next_page = (callpage + i + 1);
+                    if(next_page <= pagesize){
+                       $("#tfoot_tbpost_page").append("<a href='javascript:listener_call_page("+next_page+")'>"+next_page+"</a>");
+                    }
+                }
+                $("#tfoot_tbpost_page").append("<a href='javascript:listener_call_page("+pagesize+")'>맨뒤페이지</a>");
 
                 $(".font_tbpost_listsize").html(data["listsize"]);
                 $(".font_tbpost_pagesize").html(data["pagesize"]);

@@ -67,7 +67,6 @@ public class TbpostRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.list(param));
     }
 
-
     @Operation(summary = "게시글 목록 페이지 조회",
             description = "게시글 목록 페이지 조회 컨트롤러 <br />"
                     + "@param TbpostDto.ListReqDto <br />"
