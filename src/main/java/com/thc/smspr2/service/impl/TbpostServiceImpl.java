@@ -5,6 +5,7 @@ import com.thc.smspr2.dto.TbpostDto;
 import com.thc.smspr2.mapper.TbpostMapper;
 import com.thc.smspr2.repository.TbpostRepository;
 import com.thc.smspr2.service.TbpostService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,5 +76,72 @@ public class TbpostServiceImpl implements TbpostService {
             newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));
         }
         return newList;
+    }
+    @Override
+    public TbpostDto.PagedListResDto pagedList(TbpostDto.PagedListReqDto param){
+
+        String orderby = param.getOrderby();
+        if(orderby == null || orderby.isEmpty()){
+            orderby = "created_at";
+        }
+        String orderway = param.getOrderway();
+        if(orderway == null || orderway.isEmpty()){
+            orderway = "desc";
+        }
+        Integer perpage = param.getPerpage();
+        if(perpage == null){
+            //한번에 조회할 글 갯수
+            perpage = 10;
+        }
+        Integer callpage = param.getCallpage();
+        if(callpage == null){
+            //호출하는 페이지
+            callpage = 1;
+        }
+        if(callpage < 1){
+            callpage = 1;
+        }
+
+        //offset 을 계산하기 위해서는 전체 글 갯수가 필요합니다!
+        int listsize = tbpostMapper.pagedListCount(param);
+        /*
+        총 글 등록 수 : 127 개
+        총 페이지 수 : 13개 (10개씩 보는 기준)
+
+        내가 2페이지를 호출한다면 몇번째 부터 보면 될까요?! 11번째 => 10(offset)
+        */
+        int pagesize = listsize / perpage;
+        if(listsize % perpage != 0){
+            pagesize++;
+        }
+        if(callpage > pagesize){
+            callpage = pagesize;
+        }
+        int offset = (callpage - 1) * perpage;
+        param.setOrderby(orderby);
+        param.setOrderway(orderway);
+        param.setOffset(offset);
+        param.setPerpage(perpage);
+        //1페이지일때 0
+        //2페이지 일때 10
+
+        List<TbpostDto.SelectResDto> list = tbpostMapper.pagedList(param);
+        List<TbpostDto.SelectResDto> newList = new ArrayList<>();
+        for(TbpostDto.SelectResDto each : list){
+            newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));
+        }
+
+        TbpostDto.PagedListResDto returnVal =
+                TbpostDto.PagedListResDto.builder()
+                        .callpage(callpage)
+                        .perpage(perpage)
+                        .orderby(orderby)
+                        .orderway(orderway)
+                        .listsize(listsize)
+                        .pagesize(pagesize)
+                        .list(newList)
+                        .build();
+
+        return returnVal;
     }
 }
