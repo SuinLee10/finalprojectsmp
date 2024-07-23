@@ -33,6 +33,7 @@
 		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
+
 		<if test = "orderby =='created_at'">
 			<if test = "orderway =='desc'">
 				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbpost.created_at </if>

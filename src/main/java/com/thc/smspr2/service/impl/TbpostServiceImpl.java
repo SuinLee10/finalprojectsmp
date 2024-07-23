@@ -159,25 +159,20 @@ public class TbpostServiceImpl implements TbpostService {
             orderway = "desc";
             param.setOrderway(orderway);
         }
-        String cursor = param.getCursor();
+        //초기값 안줘도 정상 작동!
+        /*String cursor = param.getCursor();
         if(cursor == null || cursor.isEmpty()){
             if("created_at".equals(orderby) && "desc".equals(orderway)){
                 cursor = "9999-12-31 23:59:59.999999";
                 param.setCursor(cursor);
             }
-        }
+        }*/
         Integer perpage = param.getPerpage();
         if(perpage == null || perpage < 1){
             //한번에 조회할 글 갯수
             perpage = 10;
             param.setPerpage(perpage);
         }
-
-        System.out.println("00 orderby : " + orderby);
-        System.out.println("01 orderby : " + param.getOrderby());
-        System.out.println("00 orderway : " + orderway);
-        System.out.println("00 cursor : " + cursor);
-
 
         List<TbpostDto.SelectResDto> list = tbpostMapper.scrollList(param);
         List<TbpostDto.SelectResDto> newList = new ArrayList<>();
