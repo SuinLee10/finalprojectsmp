@@ -11,6 +11,7 @@ import lombok.Setter;
         ,@Index(columnList = "process")
         ,@Index(columnList = "createdAt")
         ,@Index(columnList = "modifiedAt")
+        ,@Index(columnList = "title")
 }) //인덱스 키가 유니크 키(여러개를 한번에 설정할때) 등을 설정할 수 있습니다.
 @Entity
 public class Tbpost extends AuditingFields {

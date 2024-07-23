@@ -142,7 +142,6 @@ public class TbpostDto {
         private String author;
     }
 
-
     @Builder
     @Schema
     @Getter
@@ -169,4 +168,31 @@ public class TbpostDto {
         private List<SelectResDto> list;
 
     }
+
+
+    @Builder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ScrollListReqDto{
+
+        @Schema(description = "cursor", example="")
+        private String cursor;
+        @Schema(description = "perpage", example="")
+        private Integer perpage;
+        @Schema(description = "orderby", example="")
+        private String orderby;
+        @Schema(description = "orderway", example="")
+        private String orderway;
+
+        @Schema(description = "deleted", example="")
+        private String deleted;
+        @Schema(description = "title", example="")
+        private String title;
+        @Schema(description = "author", example="")
+        private String author;
+    }
+
 }
