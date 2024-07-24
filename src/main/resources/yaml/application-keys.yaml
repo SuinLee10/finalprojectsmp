@@ -5,6 +5,7 @@ aws:
     project_folder_name: app
     access_key: 123
     secret_key: 123
+
 spring:
   datasource:
     url: jdbc:mysql://www.adapter-gwangalli.com:3306/scsmspr2?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -15,7 +16,3 @@ spring:
 google:
   login:
     client_id: 8687
-kginicis:
-  mid: muincapias
-  api_key: 0974
-  seed: SAS
