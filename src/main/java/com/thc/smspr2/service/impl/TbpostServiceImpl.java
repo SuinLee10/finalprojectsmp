@@ -160,13 +160,15 @@ public class TbpostServiceImpl implements TbpostService {
             param.setOrderway(orderway);
         }
         //초기값 안줘도 정상 작동!
-        /*String cursor = param.getCursor();
+        /*
+        String cursor = param.getCursor();
         if(cursor == null || cursor.isEmpty()){
             if("created_at".equals(orderby) && "desc".equals(orderway)){
                 cursor = "9999-12-31 23:59:59.999999";
                 param.setCursor(cursor);
             }
-        }*/
+        }
+        */
         Integer perpage = param.getPerpage();
         if(perpage == null || perpage < 1){
             //한번에 조회할 글 갯수
