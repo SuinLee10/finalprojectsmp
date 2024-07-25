@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 public class TbpostRestController {
 
-    private TbpostService tbpostService;
+    private final TbpostService tbpostService;
     public TbpostRestController(TbpostService tbpostService) {
         this.tbpostService = tbpostService;
     }

@@ -16,8 +16,8 @@ import java.util.Map;
 @Service
 public class TbpostServiceImpl implements TbpostService {
 
-    private TbpostRepository tbpostRepository;
-    private TbpostMapper tbpostMapper;
+    private final TbpostRepository tbpostRepository;
+    private final TbpostMapper tbpostMapper;
     public TbpostServiceImpl(
             TbpostRepository tbpostRepository
             ,TbpostMapper tbpostMapper

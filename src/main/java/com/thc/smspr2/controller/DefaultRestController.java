@@ -17,7 +17,7 @@ import java.io.IOException;
 @RestController
 public class DefaultRestController {
 
-    private FileUpload fileUpload;
+    private final FileUpload fileUpload;
     public DefaultRestController(FileUpload fileUpload) {
         this.fileUpload = fileUpload;
     }

@@ -1,5 +1,6 @@
 package com.thc.smspr2.controller;
 
+import com.thc.smspr2.dto.DefaultDto;
 import com.thc.smspr2.dto.TbuserDto;
 import com.thc.smspr2.service.TbuserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 public class TbuserRestController {
 
-    private TbuserService tbuserService;
+    private final TbuserService tbuserService;
     public TbuserRestController(TbuserService tbuserService) {
         this.tbuserService = tbuserService;
     }
@@ -75,7 +76,7 @@ public class TbuserRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbuserDto.SelectResDto> detail(@Valid TbuserDto.SelectReqDto param){
+    public ResponseEntity<TbuserDto.SelectResDto> detail(@Valid DefaultDto.SelectReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(param));
     }
     @Operation(summary = "사용자 목록 전체 조회",
@@ -96,7 +97,7 @@ public class TbuserRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/plist")
-    public ResponseEntity<TbuserDto.PagedListResDto> plist(@Valid TbuserDto.PagedListReqDto param){
+    public ResponseEntity<DefaultDto.PagedListResDto> plist(@Valid TbuserDto.PagedListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.pagedList(param));
     }
     @Operation(summary = "사용자 목록 스크롤 조회",

@@ -1,5 +1,6 @@
 package com.thc.smspr2.mapper;
 
+import com.thc.smspr2.dto.DefaultDto;
 import com.thc.smspr2.dto.TbuserDto;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface TbuserMapper {
     TbuserDto.SelectResDto login(TbuserDto.LoginReqDto param);
     /**/
-    TbuserDto.SelectResDto detail(TbuserDto.SelectReqDto param);
+    TbuserDto.SelectResDto detail(DefaultDto.SelectReqDto param);
     List<TbuserDto.SelectResDto> list(TbuserDto.ListReqDto param);
 
     List<TbuserDto.SelectResDto> scrollList(TbuserDto.ScrollListReqDto param);
