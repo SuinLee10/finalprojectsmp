@@ -135,7 +135,6 @@ public class DefaultDto {
             int[] res = {listsize, pagesize};
             return res;
         }
-
         public PagedListResDto afterBuild(int[] resSize, Object list){
             return PagedListResDto.builder()
                     .callpage(callpage)
