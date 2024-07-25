@@ -1,5 +1,6 @@
 package com.thc.smspr2.controller;
 
+import com.thc.smspr2.dto.DefaultDto;
 import com.thc.smspr2.dto.TbpostDto;
 import com.thc.smspr2.service.TbpostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +54,7 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid TbpostDto.SelectReqDto param){
+    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid DefaultDto.SelectReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(param));
     }
     @Operation(summary = "게시글 목록 전체 조회",
@@ -74,7 +75,7 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/plist")
-    public ResponseEntity<TbpostDto.PagedListResDto> plist(@Valid TbpostDto.PagedListReqDto param){
+    public ResponseEntity<DefaultDto.PagedListResDto> plist(@Valid TbpostDto.PagedListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.pagedList(param));
     }
     @Operation(summary = "게시글 목록 스크롤 조회",

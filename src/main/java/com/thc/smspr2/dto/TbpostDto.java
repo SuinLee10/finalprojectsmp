@@ -46,19 +46,13 @@ public class TbpostDto {
     public static class CreateResDto{
         private String id;
     }
-    @Builder
+    @SuperBuilder
     @Schema
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UpdateReqDto{
-
-        @Schema(description = "id", example="")
-        @NotNull
-        @NotEmpty
-        private String id;
-
+    public static class UpdateReqDto extends DefaultDto.UpdateReqDto{
         @Schema(description = "title", example="")
         @Size(max=400)
         private String title;
@@ -68,128 +62,53 @@ public class TbpostDto {
         @Schema(description = "content", example="")
         @Size(max=4000)
         private String content;
-
     }
 
-    @Builder
     @Schema
     @Getter
     @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class SelectReqDto{
-        @Schema(description = "id", example="")
-        @NotNull
-        @NotEmpty
-        private String id;
-    }
-    @Schema
-    @Getter
-    @Setter
-    public static class SelectResDto{
-        private String id;
-        private String deleted;
-        private String process;
-        private String createdAt;
-        private String modifiedAt;
-
+    public static class SelectResDto extends DefaultDto.SelectResDto{
+        @Schema(description = "title", example="")
         private String title;
+        @Schema(description = "author", example="")
         private String author;
+        @Schema(description = "content", example="")
         private String content;
     }
 
-    @Builder
+    @SuperBuilder
     @Schema
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ListReqDto{
-        @Schema(description = "deleted", example="")
-        private String deleted;
+    public static class ListReqDto extends DefaultDto.ListReqDto{
         @Schema(description = "title", example="")
         private String title;
         @Schema(description = "author", example="")
         private String author;
     }
 
-    @Builder
+    @SuperBuilder
     @Schema
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PagedListReqDto{
-
-        @Schema(description = "callpage", example="")
-        private Integer callpage;
-        @Schema(description = "perpage", example="")
-        private Integer perpage;
-        @Schema(description = "orderby", example="")
-        private String orderby;
-        @Schema(description = "orderway", example="")
-        private String orderway;
-
-        //원래는 고객한테 받으면 안되는 정보!
-        @Schema(description = "offset", example="")
-        private Integer offset;
-
-        @Schema(description = "deleted", example="")
-        private String deleted;
+    public static class PagedListReqDto extends DefaultDto.PagedListReqDto{
         @Schema(description = "title", example="")
         private String title;
         @Schema(description = "author", example="")
         private String author;
     }
 
-    @Builder
+    @SuperBuilder
     @Schema
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PagedListResDto{
-
-        @Schema(description = "callpage", example="")
-        private Integer callpage;
-        @Schema(description = "perpage", example="")
-        private Integer perpage;
-        @Schema(description = "orderby", example="")
-        private String orderby;
-        @Schema(description = "orderway", example="")
-        private String orderway;
-
-        @Schema(description = "listsize", example="")
-        private Integer listsize;
-        @Schema(description = "pagesize", example="")
-        private Integer pagesize;
-
-        @Schema(description = "list", example="")
-        private List<SelectResDto> list;
-
-    }
-
-
-    @Builder
-    @Schema
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ScrollListReqDto{
-
-        @Schema(description = "cursor", example="")
-        private String cursor;
-        @Schema(description = "perpage", example="")
-        private Integer perpage;
-        @Schema(description = "orderby", example="")
-        private String orderby;
-        @Schema(description = "orderway", example="")
-        private String orderway;
-
-        @Schema(description = "deleted", example="")
-        private String deleted;
-        @Schema(description = "title", example="")
+    public static class ScrollListReqDto extends DefaultDto.ScrollListReqDto{
         private String title;
         @Schema(description = "author", example="")
         private String author;
