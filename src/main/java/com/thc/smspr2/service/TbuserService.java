@@ -13,8 +13,8 @@ public interface TbuserService {
     /**/
     TbuserDto.CreateResDto create(TbuserDto.CreateReqDto param);
     TbuserDto.CreateResDto update(TbuserDto.UpdateReqDto param);
-    TbuserDto.SelectResDto detail(DefaultDto.SelectReqDto param);
-    List<TbuserDto.SelectResDto> list(TbuserDto.ListReqDto param);
+    TbuserDto.DetailResDto detail(DefaultDto.DetailReqDto param);
+    List<TbuserDto.DetailResDto> list(TbuserDto.ListReqDto param);
     DefaultDto.PagedListResDto pagedList(TbuserDto.PagedListReqDto param);
-    List<TbuserDto.SelectResDto> scrollList(TbuserDto.ScrollListReqDto param);
+    List<TbuserDto.DetailResDto> scrollList(TbuserDto.ScrollListReqDto param);
 }

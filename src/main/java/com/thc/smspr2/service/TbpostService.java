@@ -9,8 +9,8 @@ import java.util.List;
 public interface TbpostService {
     TbpostDto.CreateResDto create(TbpostDto.CreateReqDto param);
     TbpostDto.CreateResDto update(TbpostDto.UpdateReqDto param);
-    TbpostDto.SelectResDto detail(DefaultDto.SelectReqDto param);
-    List<TbpostDto.SelectResDto> list(TbpostDto.ListReqDto param);
+    TbpostDto.DetailResDto detail(DefaultDto.DetailReqDto param);
+    List<TbpostDto.DetailResDto> list(TbpostDto.ListReqDto param);
     DefaultDto.PagedListResDto pagedList(TbpostDto.PagedListReqDto param);
-    List<TbpostDto.SelectResDto> scrollList(TbpostDto.ScrollListReqDto param);
+    List<TbpostDto.DetailResDto> scrollList(TbpostDto.ScrollListReqDto param);
 }

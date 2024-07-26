@@ -5,23 +5,46 @@
     <title>index</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+
 </head>
+
+<script id="list_info_tbpostfile" type="text/x-handlebars-template">
+    {{#resultData_tbpostfile}}
+    <div>
+        <img height="50px" src="{{url}}" alt=""/>
+        <input type="text" class="create_tbpost_img_type" value="{{type}}"/>
+        <input type="text" class="create_tbpost_img_url" value="{{url}}"/>
+        <button onclick="listener_remove_img(this)">삭제</button>
+    </div>
+    {{/resultData_tbpostfile}}
+</script>
+<script type="text/javascript">
+    var list_info_tbpostfile = $("#list_info_tbpostfile").html();
+    var list_info_tbpostfile_template = Handlebars.compile(list_info_tbpostfile);
+</script>
+
 <body>
+<!--tbuserId :
+<input type="text" id="create_tbpost_tbuserId" />-->
 title :
 <input type="text" id="create_tbpost_title" />
-author :
-<input type="text" id="create_tbpost_author" />
 content :
 <input type="text" id="create_tbpost_content" />
-file :
-<button onclick="$('#create_tbpost_img').trigger('click')">gogo upload</button>
-<!--
--->
-<label for="create_tbpost_img">파일업로드하겠습니다.</label>
-<input type="file" id="create_tbpost_img" onchange="readURLFile(this)" accept="image/*" />
-<img id="img_tbpost_content" alt="" />
-<!--<input type="file" id="create_tbpost_img" onchange="readURLFile(this)" accept="image/*"/>-->
 
+<button onclick="$('#create_tbpost_img').trigger('click')">img upload</button>
+<label for="create_tbpost_img">이미지 추가.</label>
+<input type="file" id="create_tbpost_img" onchange="readURLFile(this)" accept="image/*" />
+
+<div id="div_create_tbpost_imgs">
+
+</div>
+
+<script>
+    function listener_remove_img(obj){
+        $(obj).parent().remove();
+    }
+</script>
 <script>
     let limit_each_file_size = 10;
     function readURLFile(input) {
@@ -43,11 +66,11 @@ file :
                     file_type = "image";
                 }
                 //alert(input.files[0].name);
-                listener_upload_file(input.files[0]);
+                listener_upload_file(input.files[0], file_type);
             }
         }
     }
-    function listener_upload_file(obj_file) {
+    function listener_upload_file(obj_file, file_type) {
         let fileData = new FormData();
         fileData.append("file", obj_file);
 
@@ -62,10 +85,13 @@ file :
                 //alert(xhr.status);
                 switch(xhr.status){
                     case 201:
-                        //alert(JSON.stringify(data));
-                        //alert(data["url"]);
-                        $("#create_tbpost_content").val(data.url);
-                        $("#img_tbpost_content").attr("src", data.url);
+                        let a_list = [];
+                        let each_data = {};
+                        a_list.push(each_data);
+                        each_data["type"] = file_type;
+                        each_data["url"] = data["url"];
+                        $("#div_create_tbpost_imgs").append(list_info_tbpostfile_template({"resultData_tbpostfile":a_list}));
+
                         break;
                     default:
                         console.log("no matching status code");
@@ -78,26 +104,48 @@ file :
     }
 </script>
 
+
 <button onclick="create_tbpost()">create</button>
-<a href="/tbpost/list">link to list</a>
+<a href="/tbpost/mlist">link to list</a>
 
 <script>
-    function create_tbpost(){
+    function create_tbpost() {
+
+        let tbpostfile_type = [];
+        let create_tbpost_img_types = $(".create_tbpost_img_type");
+        for(let each of create_tbpost_img_types){
+            tbpostfile_type.push($(each).val());
+        }
+
+        let tbpostfile_url = [];
+        let create_tbpost_img_urls = $(".create_tbpost_img_url");
+        for(let each of create_tbpost_img_urls){
+            tbpostfile_url.push($(each).val());
+        }
+
+        let tbuserId = localStorage.getItem("myTbuserId");
+        if (tbuserId == null || tbuserId === "") {
+            alert("로그인 이전입니다!!");
+            return false;
+        }
+
         $.ajax({
             url: "/api/tbpost",
             type: "POST",
-            contentType : 'application/json; charset=utf-8',
+            contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                title : $("#create_tbpost_title").val()
-                ,author : $("#create_tbpost_author").val()
-                ,content : $("#create_tbpost_content").val()
+                tbuserId: tbuserId
+                , title: $("#create_tbpost_title").val()
+                , content: $("#create_tbpost_content").val()
+                , tbpostfileTypes: tbpostfile_type
+                , tbpostfileUrls: tbpostfile_url
             }),
             cache: false,
-            success: (data, status, xhr)=>{
+            success: (data, status, xhr) => {
                 alert("success!!");
                 //alert(JSON.stringify(data));
             },
-            error: (data, status, xhr)=>{
+            error: (data, status, xhr) => {
                 alert("error!!");
                 alert(JSON.stringify(data));
             }

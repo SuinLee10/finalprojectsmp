@@ -108,7 +108,7 @@ public class TbuserDto {
     @Schema
     @Getter
     @Setter
-    public static class SelectResDto extends DefaultDto.SelectResDto{
+    public static class DetailResDto extends DefaultDto.DetailResDto{
 
         @Schema(description = "username", example="")
         private String username;

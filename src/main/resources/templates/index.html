@@ -8,25 +8,19 @@
 </head>
 <body>
 
-<button onclick="test()">TEST</button>
+<button onclick="logout()">LOGOUT</button>
 
 <script>
-    function test(){
-        $.ajax({
-            url: "/api/test",
-            type: "GET",
-            contentType : 'application/json; charset=utf-8',
-            data: {},
-            cache: false,
-            success: (data, status, xhr)=>{
-                //alert("success!!");
-                alert(JSON.stringify(data));
-            },
-            error: (data, status, xhr)=>{
-                alert("error!!");
-                alert(JSON.stringify(data));
-            }
-        });
+    let myTbuserId = localStorage.getItem("myTbuserId");
+    if(myTbuserId == null || myTbuserId === ""){
+        alert("로그인 이전입니다!!");
+    } else {
+        alert("로그인 감사합니다 : " + myTbuserId);
+    }
+
+    function logout(){
+        localStorage.clear();
+        alert("로그아웃 완료!!");
     }
 </script>
 

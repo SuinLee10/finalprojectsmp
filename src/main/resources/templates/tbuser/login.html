@@ -29,6 +29,7 @@ password :
                 if(data["id"] === "not matched"){
                     alert("아이디와 비밀번호가 올바르지 않습니다.");
                 } else {
+                    localStorage.setItem("myTbuserId", data["id"]);
                     location.replace("/index");
                 }
                 //alert(JSON.stringify(data));

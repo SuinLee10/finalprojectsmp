@@ -49,22 +49,22 @@ public class TbpostRestController {
 
     @Operation(summary = "게시글 상세 조회",
             description = "게시글 상세 조회 컨트롤러 <br />"
-                    + "@param TbpostDto.SelectReqDto <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.SelectResDto\\> <br />"
+                    + "@param TbpostDto.DetailReqDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid DefaultDto.SelectReqDto param){
+    public ResponseEntity<TbpostDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(param));
     }
     @Operation(summary = "게시글 목록 전체 조회",
             description = "게시글 목록 전체 조회 컨트롤러 <br />"
                     + "@param TbpostDto.ListReqDto <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.SelectResDto\\> <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/list")
-    public ResponseEntity<List<TbpostDto.SelectResDto>> list(@Valid TbpostDto.ListReqDto param){
+    public ResponseEntity<List<TbpostDto.DetailResDto>> list(@Valid TbpostDto.ListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.list(param));
     }
 
@@ -81,11 +81,11 @@ public class TbpostRestController {
     @Operation(summary = "게시글 목록 스크롤 조회",
             description = "게시글 목록 스크롤 조회 컨트롤러 <br />"
                     + "@param TbpostDto.MoreListReqDto <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.SelectResDto\\> <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/mlist")
-    public ResponseEntity<List<TbpostDto.SelectResDto>> mlist(@Valid TbpostDto.ScrollListReqDto param){
+    public ResponseEntity<List<TbpostDto.DetailResDto>> mlist(@Valid TbpostDto.ScrollListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.scrollList(param));
     }
 

@@ -33,7 +33,7 @@ public class TbuserServiceImpl implements TbuserService {
 
         /*
         //2번 방법
-        TbuserDto.SelectResDto selectResDto = tbuserMapper.login(param);
+        TbuserDto.DetailResDto selectResDto = tbuserMapper.login(param);
         if(selectResDto == null){ throw new RuntimeException("no data"); }
         //return TbuserDto.CreateResDto.builder().id(selectResDto.getId()).build();
         */
@@ -79,14 +79,14 @@ public class TbuserServiceImpl implements TbuserService {
     }
 
     @Override
-    public TbuserDto.SelectResDto detail(DefaultDto.SelectReqDto param){
-        TbuserDto.SelectResDto selectResDto = tbuserMapper.detail(param);
+    public TbuserDto.DetailResDto detail(DefaultDto.DetailReqDto param){
+        TbuserDto.DetailResDto selectResDto = tbuserMapper.detail(param);
         if(selectResDto == null){ throw new RuntimeException("no data"); }
         return selectResDto;
     }
 
     @Override
-    public List<TbuserDto.SelectResDto> list(TbuserDto.ListReqDto param){
+    public List<TbuserDto.DetailResDto> list(TbuserDto.ListReqDto param){
         return detailList(tbuserMapper.list(param));
     }
     @Override
@@ -95,15 +95,15 @@ public class TbuserServiceImpl implements TbuserService {
         return param.afterBuild(res, detailList(tbuserMapper.pagedList(param)));
     }
     @Override
-    public List<TbuserDto.SelectResDto> scrollList(TbuserDto.ScrollListReqDto param){
+    public List<TbuserDto.DetailResDto> scrollList(TbuserDto.ScrollListReqDto param){
         param.init();
         return detailList(tbuserMapper.scrollList(param));
     }
 
-    public List<TbuserDto.SelectResDto> detailList(List<TbuserDto.SelectResDto> list){
-        List<TbuserDto.SelectResDto> newList = new ArrayList<>();
-        for(TbuserDto.SelectResDto each : list){
-            newList.add(detail(DefaultDto.SelectReqDto.builder().id(each.getId()).build()));
+    public List<TbuserDto.DetailResDto> detailList(List<TbuserDto.DetailResDto> list){
+        List<TbuserDto.DetailResDto> newList = new ArrayList<>();
+        for(TbuserDto.DetailResDto each : list){
+            newList.add(detail(DefaultDto.DetailReqDto.builder().id(each.getId()).build()));
         }
         return newList;
     }

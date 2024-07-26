@@ -3,36 +3,42 @@
 <mapper namespace="com.thc.smspr2.mapper.TbpostMapper">
 
 	<!---->
-	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$SelectResDto">
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$DetailResDto">
 		SELECT tbpost.id
 			,tbpost.deleted
 			,tbpost.process
 			,tbpost.created_at as createdAt
 			,tbpost.modified_at as modifiedAt
 
+		    ,tbpost.tbuser_id as tbuserId
 			,tbpost.title
-			,tbpost.author
 			,tbpost.content
-		FROM tbpost
+
+			,tbuser.name as tbuserName
+			,tbuser.nick as tbuserNick
+			,tbuser.img as tbuserImg
+
+		FROM tbpost, tbuser
 		WHERE tbpost.id = #{id}
+		  AND tbpost.tbuser_id = tbuser.id
 	</select>
-	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$SelectResDto">
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$DetailResDto">
 		SELECT tbpost.id
 		FROM tbpost
 		WHERE tbpost.id is not NULL
 		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbpost.tbuser_id = #{tbuserId}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
-		<if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
 		ORDER BY tbpost.created_at DESC
 	</select>
 
-	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$SelectResDto">
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$DetailResDto">
 		SELECT tbpost.id
 		FROM tbpost
 		WHERE tbpost.id is not NULL
 		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbpost.tbuser_id = #{tbuserId}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
-		<if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
 
 		<if test = "orderby =='created_at'">
 			<if test = "orderway =='desc'">
@@ -57,13 +63,13 @@
 		LIMIT 0, #{perpage}
 	</select>
 
-	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$SelectResDto">
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$DetailResDto">
 		SELECT tbpost.id
 		FROM tbpost
 		WHERE tbpost.id is not NULL
 		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbpost.tbuser_id = #{tbuserId}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
-		<if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
 
 		<if test = "orderby =='created_at'">ORDER BY tbpost.created_at </if>
 		<if test = "orderby =='title'">ORDER BY tbpost.title </if>
@@ -76,8 +82,8 @@
 		FROM tbpost
 		WHERE tbpost.id is not NULL
 		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbpost.tbuser_id = #{tbuserId}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
-		<if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
 	</select>
 
 </mapper>

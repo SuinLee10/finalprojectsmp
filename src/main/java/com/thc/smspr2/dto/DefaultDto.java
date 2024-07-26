@@ -41,7 +41,7 @@ public class DefaultDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SelectReqDto{
+    public static class DetailReqDto{
         @Schema(description = "id", example="")
         @NotNull
         @NotEmpty
@@ -51,7 +51,7 @@ public class DefaultDto {
     @Schema
     @Getter
     @Setter
-    public static class SelectResDto{
+    public static class DetailResDto{
         @Schema(description = "id", example="")
         private String id;
         @Schema(description = "deleted", example="")

@@ -71,22 +71,22 @@ public class TbuserRestController {
 
     @Operation(summary = "사용자 상세 조회",
             description = "사용자 상세 조회 컨트롤러 <br />"
-                    + "@param TbuserDto.SelectReqDto <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.SelectResDto\\> <br />"
+                    + "@param TbuserDto.DetailReqDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbuserDto.SelectResDto> detail(@Valid DefaultDto.SelectReqDto param){
+    public ResponseEntity<TbuserDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(param));
     }
     @Operation(summary = "사용자 목록 전체 조회",
             description = "사용자 목록 전체 조회 컨트롤러 <br />"
                     + "@param TbuserDto.ListReqDto <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.SelectResDto\\> <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/list")
-    public ResponseEntity<List<TbuserDto.SelectResDto>> list(@Valid TbuserDto.ListReqDto param){
+    public ResponseEntity<List<TbuserDto.DetailResDto>> list(@Valid TbuserDto.ListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.list(param));
     }
 
@@ -103,11 +103,11 @@ public class TbuserRestController {
     @Operation(summary = "사용자 목록 스크롤 조회",
             description = "사용자 목록 스크롤 조회 컨트롤러 <br />"
                     + "@param TbuserDto.MoreListReqDto <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.SelectResDto\\> <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/mlist")
-    public ResponseEntity<List<TbuserDto.SelectResDto>> mlist(@Valid TbuserDto.ScrollListReqDto param){
+    public ResponseEntity<List<TbuserDto.DetailResDto>> mlist(@Valid TbuserDto.ScrollListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.scrollList(param));
     }
 
