@@ -221,7 +221,7 @@ content :
                 each_data["id"] = obj_data["id"];
                 each_data["type"] = type;
                 each_data["url"] = url;
-                $("#div_create_tbpost_imgs").append(list_info_tbpostfile_template({"resultData_tbpostfile":a_list}));
+                $("#div_create_tbpost_imgs").prepend(list_info_tbpostfile_template({"resultData_tbpostfile":a_list}));
             },
             error: (data, status, xhr) => {
                 alert("error!!");

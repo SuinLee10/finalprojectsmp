@@ -111,6 +111,12 @@ content :
 <script>
     function create_tbpost() {
 
+        let tbuserId = localStorage.getItem("myTbuserId");
+        if (tbuserId == null || tbuserId === "") {
+            alert("로그인 이전입니다!!");
+            return false;
+        }
+
         let tbpostfile_type = [];
         let create_tbpost_img_types = $(".create_tbpost_img_type");
         for(let each of create_tbpost_img_types){
@@ -121,12 +127,6 @@ content :
         let create_tbpost_img_urls = $(".create_tbpost_img_url");
         for(let each of create_tbpost_img_urls){
             tbpostfile_url.push($(each).val());
-        }
-
-        let tbuserId = localStorage.getItem("myTbuserId");
-        if (tbuserId == null || tbuserId === "") {
-            alert("로그인 이전입니다!!");
-            return false;
         }
 
         $.ajax({
