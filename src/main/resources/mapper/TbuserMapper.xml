@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thc.smspr2.mapper.TbuserMapper">
 
-	<select id="DetailRe" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbuserDto$DetailResDto">
+	<select id="login" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbuserDto$DetailResDto">
 		SELECT tbuser.id
 		FROM tbuser
 		WHERE tbuser.username = #{username}
