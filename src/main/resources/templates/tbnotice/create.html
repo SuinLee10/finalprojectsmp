@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+test!!
+
+<input type="text" id="input_id" />
+<input type="text" id="input_title" />
+<input type="text" id="input_content" />
+
+<button onclick="func_test()">버튼입니다!</button>
+
+
+<script>
+    function func_test(){
+        $.ajax({
+            url: "/api/tbnotice/create",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                id: $("#input_id").val()
+                ,title: $("#input_title").val()
+                ,content: $("#input_content").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (data, status, xhr)=>{
+                alert("error!!");
+                //alert(JSON.stringify(data));
+            }
+        });
+    }
+</script>
+</body>
+</html>
