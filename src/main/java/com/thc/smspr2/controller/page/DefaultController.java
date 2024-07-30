@@ -27,6 +27,11 @@ public class DefaultController {
         return "agree";
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/uploadfile/{file_name:.+}", method = {RequestMethod.GET,RequestMethod.POST})
     public byte[] getImage(@PathVariable("file_name") String file_name, HttpServletRequest request) throws Exception {
