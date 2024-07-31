@@ -27,8 +27,6 @@ spring:
       enabled: true
     restart:
       enabled: true
-    thymeleaf:
-      cache: false
     remote:
       restart:
         enabled: false

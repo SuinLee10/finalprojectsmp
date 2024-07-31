@@ -2,6 +2,7 @@ package com.thc.smspr2.controller;
 
 import com.thc.smspr2.domain.Tbnotice;
 import com.thc.smspr2.repository.TbnoticeRepository;
+import com.thc.smspr2.service.TbnoticeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,36 +18,26 @@ import java.util.Map;
 @RestController
 public class TbnoticeRestController {
 
-    private final TbnoticeRepository tbnoticeRepository;
-    public TbnoticeRestController(TbnoticeRepository tbnoticeRepository) {
-        this.tbnoticeRepository = tbnoticeRepository;
+    private final TbnoticeService tbnoticeService;
+    public TbnoticeRestController(TbnoticeService tbnoticeService) {
+        this.tbnoticeService = tbnoticeService;
     }
 
     @GetMapping("/create")
     public Map<String, Object> create(@RequestParam Map<String, Object> param) {
         System.out.println(param);
-
-        Tbnotice tbnotice = new Tbnotice();
-        tbnotice.setId(param.get("id") + "");
-        tbnotice.setTitle(param.get("title") + "");
-        tbnotice.setContent(param.get("content") + "");
-
-        tbnoticeRepository.save(tbnotice);
-
-        Map<String, Object> returnValue = new HashMap<>();
-        returnValue.put("result", "200");
-
+        Map<String, Object> returnValue = tbnoticeService.create(param);
         return returnValue;
     }
 
     @GetMapping("/list")
     public Map<String, Object> list() {
 
-        List<Tbnotice> list = tbnoticeRepository.findAll();
+        //List<Tbnotice> list = tbnoticeRepository.findAll();
 
         Map<String, Object> returnValue = new HashMap<>();
         returnValue.put("result", "200");
-        returnValue.put("data", list);
+        //returnValue.put("data", list);
 
         return returnValue;
     }
