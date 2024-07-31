@@ -66,7 +66,10 @@ content :
 
 </div>
 
-좋아요 <font class="font_tbpost_liked">-</font>: <button onclick="toggle_tbpostlike()">like</button>
+좋아요 <font class="font_tbpost_liked">-</font>:
+<input type="checkbox" id="detail_tbpost_liked" onchange="toggle_tbpostlike()"/>
+
+<!--<button onclick="toggle_tbpostlike()">like</button>-->
 
 댓글 :
 <input id="create_tbpostcmt_content" type="text" />
@@ -267,9 +270,18 @@ content :
             success: (obj_data, status, xhr)=>{
                 //alert(obj_data["liked"]);
                 //alert(JSON.stringify(obj_data));
+
+                /*<input type="text" id="detail_tbpost_title" />*/
+
                 let detailKeys = Object.keys(obj_data);
                 for (let eachKey of detailKeys){
-                    $("#detail_tbpost_" + eachKey).val(obj_data[eachKey]);
+                    let tempType = $("#detail_tbpost_" + eachKey).attr("type");
+                    if(tempType === "checkbox"){
+                        $("#detail_tbpost_" + eachKey).prop("checked", obj_data[eachKey]);
+                    } else {
+                        $("#detail_tbpost_" + eachKey).val(obj_data[eachKey]);
+                    }
+
                     $(".font_tbpost_" + eachKey).text(obj_data[eachKey]);
                 }
 
@@ -362,11 +374,15 @@ content :
                 //alert("success!!");
                 //alert(JSON.stringify(data));
 
+                //$("#detail_tbpost_liked").prop("checked", !(data["id"] === "success"));
                 if(data["id"] === "success"){
                     //alert("좋아요 취소!");
                     $(".font_tbpost_liked").text(false);
+                    $("#detail_tbpost_liked").prop("checked", false);
+
                 } else {
                     $(".font_tbpost_liked").text(true);
+                    $("#detail_tbpost_liked").prop("checked", true);
                 }
             },
             error: (data, status, xhr)=>{
