@@ -66,6 +66,8 @@ content :
 
 </div>
 
+좋아요 <font class="font_tbpost_liked">-</font>: <button onclick="toggle_tbpostlike()">like</button>
+
 댓글 :
 <input id="create_tbpostcmt_content" type="text" />
 <button onclick="create_tbpostcmt()">create</button>
@@ -259,10 +261,11 @@ content :
             contentType : 'application/json; charset=utf-8',
             data: {
                 id : getIdFromUrl(null)
+                ,tbuserId : localStorage.getItem("myTbuserId")
             },
             cache: false,
             success: (obj_data, status, xhr)=>{
-                //alert("success!!");
+                //alert(obj_data["liked"]);
                 //alert(JSON.stringify(obj_data));
                 let detailKeys = Object.keys(obj_data);
                 for (let eachKey of detailKeys){
@@ -331,6 +334,40 @@ content :
             success: (data, status, xhr)=>{
                 //alert("success!!");
                 alert(JSON.stringify(data));
+            },
+            error: (data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(data));
+            }
+        });
+    }
+    function toggle_tbpostlike(){
+
+        let tbuserId = localStorage.getItem("myTbuserId");
+        if (tbuserId == null || tbuserId === "") {
+            alert("로그인 이전입니다!!");
+            return false;
+        }
+
+        $.ajax({
+            url: "/api/tbpostlike/toggle",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                tbpostId: $("#detail_tbpost_id").val()
+                ,tbuserId : tbuserId
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                //alert("success!!");
+                //alert(JSON.stringify(data));
+
+                if(data["id"] === "success"){
+                    //alert("좋아요 취소!");
+                    $(".font_tbpost_liked").text(false);
+                } else {
+                    $(".font_tbpost_liked").text(true);
+                }
             },
             error: (data, status, xhr)=>{
                 alert("error!!");

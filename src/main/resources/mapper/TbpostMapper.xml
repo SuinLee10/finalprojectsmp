@@ -13,6 +13,7 @@
 		    ,tbpost.tbuser_id as tbuserId
 			,tbpost.title
 			,tbpost.content
+			,tbpost.countread
 
 			,tbuser.name as tbuserName
 			,tbuser.nick as tbuserNick

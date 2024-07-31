@@ -46,6 +46,9 @@ public class DefaultDto {
         @NotNull
         @NotEmpty
         private String id;
+        //이거는 로그인 한 사람이 쓰는 정보
+        @Schema(description = "tbuserId", example="")
+        private String tbuserId;
     }
     //여기는 빌더 붙이면 에러 나요!! 조심!!
     @Schema
@@ -193,6 +196,10 @@ public class DefaultDto {
         private String deleted;
         @Schema(description = "process", example="")
         private String process;
+
+        //이거는 로그인 한 사람이 쓰는 정보
+        @Schema(description = "tbuserId", example="")
+        private String tbuserId;
 
         public void init(){
             if(orderby == null || orderby.isEmpty()){
