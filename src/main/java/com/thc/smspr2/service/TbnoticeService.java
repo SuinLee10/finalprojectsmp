@@ -8,5 +8,6 @@ import java.util.Map;
 public interface TbnoticeService {
     /**/
     Map<String, Object> create(Map<String, Object> param);
-    List<Tbnotice> list(Map<String, Object> param);
+    Map<String, Object> detail(Map<String, Object> param);
+    List<Map<String, Object>> list(Map<String, Object> param);
 }

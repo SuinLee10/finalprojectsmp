@@ -31,13 +31,13 @@ public class TbnoticeRestController {
     }
 
     @GetMapping("/list")
-    public Map<String, Object> list() {
+    public Map<String, Object> list(@RequestParam Map<String, Object> param) {
 
-        //List<Tbnotice> list = tbnoticeRepository.findAll();
+        List<Map<String, Object>> list = tbnoticeService.list(param);
 
         Map<String, Object> returnValue = new HashMap<>();
         returnValue.put("result", "200");
-        //returnValue.put("data", list);
+        returnValue.put("data", list);
 
         return returnValue;
     }

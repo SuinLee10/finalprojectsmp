@@ -8,7 +8,9 @@
 </head>
 <body>
 list!!
-
+<div>
+    search title : <input type="text" id="search_title" />
+</div>
 <button onclick="func_test()">버튼입니다!</button>
 
 
@@ -18,7 +20,9 @@ list!!
             url: "/api/tbnotice/list",
             type: "GET",
             contentType : 'application/json; charset=utf-8',
-            data: {},
+            data: {
+                title : $("#search_title").val()
+            },
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
