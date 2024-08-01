@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface TbuserService {
 
+    TbuserDto.CreateResDto confirm(TbuserDto.ConfirmReqDto param);
+    TbuserDto.CreateResDto email(TbuserDto.UidReqDto param);
+    TbuserDto.CreateResDto id(TbuserDto.UidReqDto param);
     TbuserDto.CreateResDto login(TbuserDto.LoginReqDto param);
     TbuserDto.CreateResDto signup(TbuserDto.SignupReqDto param);
     /**/

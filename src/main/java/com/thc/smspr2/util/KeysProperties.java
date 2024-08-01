@@ -13,4 +13,7 @@ public class KeysProperties {
 	@Value("${aws.s3.project_folder_name}") private String project_folder_name;
 	@Value("${aws.s3.access_key}") private String access_key;
 	@Value("${aws.s3.secret_key}") private String secret_key;
+
+	@Value("${email.id}") private String email_id;
+	@Value("${email.pw}") private String email_pw;
 }

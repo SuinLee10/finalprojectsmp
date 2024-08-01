@@ -16,3 +16,7 @@ spring:
 google:
   login:
     client_id: 8687
+
+email:
+  id: talhwan1st@gmail.com
+  pw: 11111

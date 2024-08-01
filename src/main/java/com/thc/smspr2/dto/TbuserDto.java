@@ -18,6 +18,37 @@ public class TbuserDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class ConfirmReqDto{
+        @Schema(description = "username", example="")
+        @NotNull
+        @NotEmpty
+        @Size(max=400)
+        private String username;
+        @Schema(description = "number", example="")
+        @NotNull
+        @NotEmpty
+        private String number;
+    }
+    @Builder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UidReqDto{
+        @Schema(description = "username", example="")
+        @NotNull
+        @NotEmpty
+        @Size(max=400)
+        private String username;
+    }
+
+    @Builder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class LoginReqDto{
         @Schema(description = "username", example="")
         @NotNull
