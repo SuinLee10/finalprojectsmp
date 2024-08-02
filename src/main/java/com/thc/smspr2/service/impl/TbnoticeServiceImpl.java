@@ -1,6 +1,7 @@
 package com.thc.smspr2.service.impl;
 
 import com.thc.smspr2.domain.Tbnotice;
+import com.thc.smspr2.dto.TbnoticeDto;
 import com.thc.smspr2.mapper.TbnoticeMapper;
 import com.thc.smspr2.repository.TbnoticeRepository;
 import com.thc.smspr2.service.TbnoticeService;
@@ -26,21 +27,8 @@ public class TbnoticeServiceImpl implements TbnoticeService {
 
 
     @Override
-    public Map<String, Object> create(Map<String, Object> param){
-
-
-        Tbnotice tbnotice = new Tbnotice();
-        //tbnotice.setId(param.get("id") + "");
-        tbnotice.setTitle(param.get("title") + "");
-        tbnotice.setContent(param.get("content") + "");
-
-        tbnotice = tbnoticeRepository.save(tbnotice);
-
-        Map<String, Object> returnValue = new HashMap<>();
-        returnValue.put("result", "200");
-        returnValue.put("id", tbnotice.getId());
-
-        return returnValue;
+    public TbnoticeDto.CreateResDto create(TbnoticeDto.CreateReqDto param){
+        return tbnoticeRepository.save(param.toEntity()).toCreateResDto();
     }
     @Override
     public Map<String, Object> detail(Map<String, Object> param){

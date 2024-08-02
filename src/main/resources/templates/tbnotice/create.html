@@ -9,7 +9,7 @@
 <body>
 test!!
 
-<input type="text" id="input_id" />
+<!--<input type="text" id="input_id" />-->
 <input type="text" id="input_title" />
 <input type="text" id="input_content" />
 
@@ -19,14 +19,13 @@ test!!
 <script>
     function func_test(){
         $.ajax({
-            url: "/api/tbnotice/create",
-            type: "GET",
+            url: "/api/tbnotice",
+            type: "POST",
             contentType : 'application/json; charset=utf-8',
-            data: {
-                id: $("#input_id").val()
-                ,title: $("#input_title").val()
-                ,content: $("#input_content").val()
-            },
+            data: JSON.stringify({
+                title : $("#input_title").val()
+                ,content : $("#input_content").val()
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
