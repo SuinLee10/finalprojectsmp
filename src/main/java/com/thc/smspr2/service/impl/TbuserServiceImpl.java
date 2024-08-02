@@ -9,11 +9,13 @@ import com.thc.smspr2.mapper.TbuserMapper;
 import com.thc.smspr2.repository.TbemailRepository;
 import com.thc.smspr2.repository.TbuserRepository;
 import com.thc.smspr2.service.TbuserService;
+import com.thc.smspr2.util.NowDate;
 import com.thc.smspr2.util.SendEmail;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -42,7 +44,22 @@ public class TbuserServiceImpl implements TbuserService {
         if(tbemail == null){
             return TbuserDto.CreateResDto.builder().id("not matched").build();
         } else {
-            tbemailRepository.delete(tbemail);
+            String now = new NowDate().getNow();
+            String due = tbemail.getDue();
+
+            //현재시간이랑, 늦은 시간이랑 정렬을 해본다.
+            String[] arrayTemp = {now, due};
+            Arrays.sort(arrayTemp);
+            System.out.println(now + "//" + due + "//  => " + arrayTemp[0]);
+
+            if(now.equals(arrayTemp[1])){
+                //늦었을때!!!
+                return TbuserDto.CreateResDto.builder().id("expired").build();
+            }
+            //이제 완료 처리 된 것 저장!!
+            tbemail.setProcess("done");
+            tbemailRepository.save(tbemail);
+            //tbemailRepository.delete(tbemail);
             return TbuserDto.CreateResDto.builder().id("ok").build();
         }
     }
@@ -61,15 +78,21 @@ public class TbuserServiceImpl implements TbuserService {
             }
             //이메일 보내기!!
             try{
+                String due = new NowDate().getDue(180);
+
                 Tbemail tbemail = tbemailRepository.findByUsername(param.getUsername());
                 if(tbemail == null){
-                    tbemailRepository.save(TbemailDto.CreateReqDto.builder().username(param.getUsername()).number(number).build().toEntity());
+                    tbemailRepository.save(TbemailDto.CreateReqDto.builder().username(param.getUsername()).number(number).due(due).build().toEntity());
                 } else {
                     tbemail.setNumber(number);
+                    tbemail.setDue(due);
+                    if("done".equals(tbemail.getProcess())){
+                        tbemail.setProcess("yet");
+                    }
                     tbemailRepository.save(tbemail);
                 }
                 System.out.println("number : " + number);
-                sendEmail.send(param.getUsername(), "이메일 인증입니다" , "인증번호 : " + number);
+                //sendEmail.send(param.getUsername(), "이메일 인증입니다" , "인증번호 : " + number);
             } catch(Exception e){
 
             }
@@ -115,6 +138,12 @@ public class TbuserServiceImpl implements TbuserService {
 
     @Override
     public TbuserDto.CreateResDto signup(TbuserDto.SignupReqDto param){
+        Tbemail tbemail = tbemailRepository.findByUsername(param.getUsername());
+        if(tbemail == null || !"done".equals(tbemail.getProcess())){
+            return TbuserDto.CreateResDto.builder().id("not qualified").build();
+        } else {
+            tbemailRepository.delete(tbemail);
+        }
         TbuserDto.CreateReqDto newParam = TbuserDto.CreateReqDto.builder().username(param.getUsername()).password(param.getPassword()).build();
         return tbuserRepository.save(newParam.toEntity()).toCreateResDto();
     }

@@ -23,7 +23,10 @@ username :
 <div id="div_tbemail_confirm" class="hide">
     인증번호 :
     <input type="text" id="create_tbemail_number" />
-    <button onclick="confirm_email()">인증번호 확인</button>
+    <font class="font_tbemail_remain" style="margin-left : -35px">-</font>
+    <!--<div>남은 시간 <font class="font_tbemail_remain">-</font></div>-->
+    <button onclick="confirm_email()" style="margin-left:35px;">인증번호 확인</button>
+    <input type="hidden" id="input_tbemail_reamin" value="180"/>
 </div>
 
 
@@ -33,6 +36,42 @@ password :
 <button onclick="signup_tbuser()">signup</button>
 <a href="/tbuser/mlist">link to Scroll list</a>
 
+<script>
+    let funcInterval = null;
+    //let timer = 180;
+    function listener_count(){
+        //특정 시간 간격으로 반복 실행되는 기능!
+        funcInterval = setInterval(funcTimer, 1000); //파라미터 첫번 째는 반복실행할 함수, 두번째는 반복할 주기(밀리세컨드 단위)
+        //1000 => 1초 입니닷!!
+    }
+    function funcTimer() {
+        let timer = Number($("#input_tbemail_reamin").val());//text => number 형태로 변환!
+        timer--;
+        $("#input_tbemail_reamin").val(timer);
+
+        let min = timer / 60;
+        //소수점 제거
+        //min = min.toFixed();
+        min = Math.floor(min);
+        let second_string = "";
+        let second = timer % 60;
+        if(second < 10){
+            second_string = "0" + second;
+        } else {
+            second_string = "" + second;
+        }
+        //console.log('a');
+        $(".font_tbemail_remain").text(min + ":" + second_string);
+        if(timer < 0){
+            funcIntervalClear();
+            $(".font_tbemail_remain").text("0:00");
+            $("#input_tbemail_reamin").val(0);
+        }
+    }
+    function funcIntervalClear() {
+        clearInterval(funcInterval);
+    }
+</script>
 <script>
     function confirm_email(){
         $.ajax({
@@ -80,6 +119,7 @@ password :
                         //여기는 중복 체크 통과!!
                         alert("인증번호가 전송되었습니다. 이메일에서 확인해주세요!");
                         $("#div_tbemail_confirm").removeClass("hide");
+                        listener_count();
                         break;
                     default :
                         //여기는 중복되어서 더이상 진행 불가!

@@ -26,9 +26,12 @@ public class TbemailDto {
         @NotNull
         @NotEmpty
         private String number;
+        //이거는 실제로 고객이 보내는 정보가 아닙니다!
+        @Schema(description = "due", example="")
+        private String due;
 
         public Tbemail toEntity(){
-            return Tbemail.of(username, number);
+            return Tbemail.of(username, number, due);
         }
     }
     @Builder
