@@ -24,6 +24,16 @@ public class TbuserRestController {
         this.tbuserService = tbuserService;
     }
 
+    @Operation(summary = "access token 발급",
+            description = "access token 발급 컨트롤러 <br />"
+                    + "@param TbuserDto.AccessReqDto <br />"
+                    + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbuserDto.CreateResDto\\> <br />"
+                    + "@exception 필수 파라미터 누락하였을 때 등 <br />"
+    )
+    @PostMapping("/access")
+    public ResponseEntity<TbuserDto.CreateResDto> access(@Valid @RequestBody TbuserDto.AccessReqDto param){
+        return ResponseEntity.status(HttpStatus.CREATED).body(tbuserService.access(param));
+    }
     @Operation(summary = "사용자 이메일 인증확인",
             description = "사용자 이메일 인증확인 컨트롤러 <br />"
                     + "@param TbuserDto.UidReqDto <br />"

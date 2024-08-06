@@ -18,6 +18,18 @@ public class TbuserDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class AccessReqDto{
+        @Schema(description = "refreshToken", example="")
+        @NotNull
+        @NotEmpty
+        private String refreshToken;
+    }
+    @Builder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ConfirmReqDto{
         @Schema(description = "username", example="")
         @NotNull
