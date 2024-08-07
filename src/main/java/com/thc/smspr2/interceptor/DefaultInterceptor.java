@@ -18,6 +18,9 @@ public class DefaultInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        String requestMethod = request.getMethod();
+        logger.info("0-0: requestMethod [{}]", requestMethod);
+
         if(request.getHeader("Authorization") != null && !request.getHeader("Authorization").isEmpty()){
             TokenFactory tokenFactory = new TokenFactory();
             String tbuserId = tokenFactory.verify(request.getHeader("Authorization"));

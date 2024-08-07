@@ -46,10 +46,23 @@ public class DefaultDto {
         @NotNull
         @NotEmpty
         private String id;
+        /*
         //이거는 로그인 한 사람이 쓰는 정보
         @Schema(description = "tbuserId", example="")
-        private String tbuserId;
+        private String tbuserId;*/
     }
+
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DetailServDto extends DetailReqDto{
+        @Schema(description = "reqTbuserId", example="")
+        private String reqTbuserId;
+    }
+
     //여기는 빌더 붙이면 에러 나요!! 조심!!
     @Schema
     @Getter

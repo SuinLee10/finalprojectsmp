@@ -37,7 +37,16 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @PostMapping("")
-    public ResponseEntity<TbpostDto.CreateResDto> create(@Valid @RequestBody TbpostDto.CreateReqDto param){
+    public ResponseEntity<TbpostDto.CreateResDto> create(@Valid @RequestBody TbpostDto.CreateReqDto param, HttpServletRequest request){
+        String reqTbuserId = request.getAttribute("reqTbuserId") + "";
+        //인터셉터에서 토큰이 없었을 경우!
+        if (request.getAttribute("reqTbuserId") == null) {
+            //return null;
+            throw new RuntimeException("should login");
+        }
+        //
+        param.setTbuserId(reqTbuserId);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(tbpostService.create(param));
     }
 
@@ -92,9 +101,6 @@ public class TbpostRestController {
     )
     @GetMapping("/mlist")
     public ResponseEntity<List<TbpostDto.DetailResDto>> mlist(@Valid TbpostDto.ScrollListReqDto param, HttpServletRequest request, HttpServletResponse response){
-        String reqTbuserId = request.getAttribute("reqTbuserId") + "";
-        logger.info("C-1: reqTbuserId [{}]", reqTbuserId);
-
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.scrollList(param));
     }
 

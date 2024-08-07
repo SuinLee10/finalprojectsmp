@@ -155,8 +155,8 @@ public class TbuserDto {
 
         @Schema(description = "username", example="")
         private String username;
-        @Schema(description = "password", example="")
-        private String password;
+        /*@Schema(description = "password", example="")
+        private String password;*/
         @Schema(description = "name", example="")
         private String name;
         @Schema(description = "nick", example="")

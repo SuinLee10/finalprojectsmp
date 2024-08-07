@@ -5,6 +5,7 @@ import com.thc.smspr2.dto.TbuserDto;
 import com.thc.smspr2.service.TbuserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,41 @@ public class TbuserRestController {
     private final TbuserService tbuserService;
     public TbuserRestController(TbuserService tbuserService) {
         this.tbuserService = tbuserService;
+    }
+
+    @Operation(summary = "사용자 로그아웃(사용자만 접근 가능)",
+            description = "사용자 로그아웃 컨트롤러 <br />"
+                    + "@param TbuserDto.DetailReqDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.DetailResDto\\> <br />"
+                    + "@exception 필수 파라미터 누락하였을 때 등 <br />"
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<TbuserDto.CreateResDto> logout(HttpServletRequest request){
+        String reqTbuserId = request.getAttribute("reqTbuserId") + "";
+        //인터셉터에서 토큰이 없었을 경우!
+        if (request.getAttribute("reqTbuserId") == null) {
+            //return null;
+            throw new RuntimeException("should login");
+        }
+        DefaultDto.DetailReqDto param = DefaultDto.DetailReqDto.builder().id(reqTbuserId).build();
+        return ResponseEntity.status(HttpStatus.OK).body(tbuserService.logout(param));
+    }
+    @Operation(summary = "사용자 내 정보 상세 조회(사용자만 접근 가능)",
+            description = "사용자 내 정보 컨트롤러 <br />"
+                    + "@param TbuserDto.DetailReqDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserDto.DetailResDto\\> <br />"
+                    + "@exception 필수 파라미터 누락하였을 때 등 <br />"
+    )
+    @GetMapping("/my")
+    public ResponseEntity<TbuserDto.DetailResDto> my(HttpServletRequest request){
+        String reqTbuserId = request.getAttribute("reqTbuserId") + "";
+        //인터셉터에서 토큰이 없었을 경우!
+        if (request.getAttribute("reqTbuserId") == null) {
+            //return null;
+            throw new RuntimeException("should login");
+        }
+        DefaultDto.DetailServDto param = DefaultDto.DetailServDto.builder().id("my").reqTbuserId(reqTbuserId).build();
+        return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(param));
     }
 
     @Operation(summary = "access token 발급",
@@ -116,8 +152,10 @@ public class TbuserRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbuserDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param){
-        return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(param));
+    public ResponseEntity<TbuserDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param, HttpServletRequest request){
+        String reqTbuserId = request.getAttribute("reqTbuserId") + "";
+        DefaultDto.DetailServDto newParam = DefaultDto.DetailServDto.builder().id(param.getId()).reqTbuserId(reqTbuserId).build();
+        return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(newParam));
     }
     @Operation(summary = "사용자 목록 전체 조회",
             description = "사용자 목록 전체 조회 컨트롤러 <br />"

@@ -111,8 +111,8 @@ content :
 <script>
     function create_tbpost() {
 
-        let tbuserId = localStorage.getItem("myTbuserId");
-        if (tbuserId == null || tbuserId === "") {
+        let refreshToken = localStorage.getItem("refreshToken");
+        if(refreshToken == null || refreshToken === ""){
             alert("로그인 이전입니다!!");
             return false;
         }
@@ -133,9 +133,13 @@ content :
             url: "/api/tbpost",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type","application/json");
+                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+            },
             data: JSON.stringify({
-                tbuserId: tbuserId
-                , title: $("#create_tbpost_title").val()
+                /*tbuserId: tbuserId*/
+                title: $("#create_tbpost_title").val()
                 , content: $("#create_tbpost_content").val()
                 , tbpostfileTypes: tbpostfile_type
                 , tbpostfileUrls: tbpostfile_url

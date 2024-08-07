@@ -66,6 +66,14 @@ public class TbuserServiceImpl implements TbuserService {
     }
 
     @Override
+    public TbuserDto.CreateResDto logout(DefaultDto.DetailReqDto param){
+        Tbrefreshtoken tbrefreshtoken = tbrefreshtokenRepository.findByTbuserId(param.getId());
+        if(tbrefreshtoken == null){ throw new RuntimeException("no data"); }
+        tbrefreshtokenRepository.delete(tbrefreshtoken);
+        return TbuserDto.CreateResDto.builder().id("logout").build();
+    }
+
+    @Override
     public TbuserDto.CreateResDto access(TbuserDto.AccessReqDto param){
         //엑세스 토큰 발급 합니다!
         String accessToken = tokenFactory.accessToken(param.getRefreshToken());
@@ -221,7 +229,12 @@ public class TbuserServiceImpl implements TbuserService {
     }
 
     @Override
-    public TbuserDto.DetailResDto detail(DefaultDto.DetailReqDto param){
+    public TbuserDto.DetailResDto detail(DefaultDto.DetailServDto param){
+        //내 정보 요청하는 경우!
+        if("my".equals(param.getId())){
+            param.setId(param.getReqTbuserId());
+        }
+
         TbuserDto.DetailResDto selectResDto = tbuserMapper.detail(param);
         if(selectResDto == null){ throw new RuntimeException("no data"); }
         return selectResDto;
@@ -245,7 +258,7 @@ public class TbuserServiceImpl implements TbuserService {
     public List<TbuserDto.DetailResDto> detailList(List<TbuserDto.DetailResDto> list){
         List<TbuserDto.DetailResDto> newList = new ArrayList<>();
         for(TbuserDto.DetailResDto each : list){
-            newList.add(detail(DefaultDto.DetailReqDto.builder().id(each.getId()).build()));
+            newList.add(detail(DefaultDto.DetailServDto.builder().id(each.getId()).build()));
         }
         return newList;
     }

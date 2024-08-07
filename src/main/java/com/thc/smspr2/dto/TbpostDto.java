@@ -19,9 +19,10 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CreateReqDto{
+        //사용자에게 입력 받는 값이 아닙니다!! 주의!!
         @Schema(description = "tbuserId", example="")
-        @NotNull
-        @NotEmpty
+        /*@NotNull
+        @NotEmpty*/
         private String tbuserId;
 
         @Schema(description = "title", example="")

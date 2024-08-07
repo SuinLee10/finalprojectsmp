@@ -36,21 +36,27 @@ public class TokenFactory {
     }
     public String verify(String token){
         String decodeToken = "";
+        long expiredMillSec = 0;
+        long nowMillSec = 0;
+        String tbuserId = "";
         try{
             String secretKey = "1234567890123456";
             decodeToken = AES256Cipher.AES_Decode(secretKey, token);
 
-            String[] arrayToken = decodeToken.split("_");
-            long expiredMillSec = Long.parseLong(arrayToken[1]);
             Date nowDate = new Date();
-            long nowMillSec = nowDate.getTime();
-            if(nowMillSec < expiredMillSec){
-                return arrayToken[0];
-            } else {
-                throw new RuntimeException("expired");
-            }
+            nowMillSec = nowDate.getTime();
+            String[] arrayToken = decodeToken.split("_");
+            expiredMillSec = Long.parseLong(arrayToken[1]);
+            tbuserId = arrayToken[0];
+
         } catch (Exception e){
+            logger.info("failed to verify token");
             throw new RuntimeException("AES encrypt failed");
+        }
+        if(nowMillSec < expiredMillSec){
+            return tbuserId;
+        } else {
+            throw new RuntimeException("expired");
         }
     }
     public String refreshToken(String tbuserId){
@@ -58,6 +64,7 @@ public class TokenFactory {
     }
     public String accessToken(String refreshToken){
         return generate(verify(refreshToken), 60 * 60 * 24 * 2);
+        //return generate(verify(refreshToken), 5);
     }
 
     //public

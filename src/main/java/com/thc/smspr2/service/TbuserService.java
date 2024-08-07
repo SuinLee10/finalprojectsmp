@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TbuserService {
 
+    TbuserDto.CreateResDto logout(DefaultDto.DetailReqDto param);
+
     TbuserDto.CreateResDto access(TbuserDto.AccessReqDto param);
     TbuserDto.CreateResDto confirm(TbuserDto.ConfirmReqDto param);
     TbuserDto.CreateResDto email(TbuserDto.UidReqDto param);
@@ -17,7 +19,7 @@ public interface TbuserService {
     /**/
     TbuserDto.CreateResDto create(TbuserDto.CreateReqDto param);
     TbuserDto.CreateResDto update(TbuserDto.UpdateReqDto param);
-    TbuserDto.DetailResDto detail(DefaultDto.DetailReqDto param);
+    TbuserDto.DetailResDto detail(DefaultDto.DetailServDto param);
     List<TbuserDto.DetailResDto> list(TbuserDto.ListReqDto param);
     DefaultDto.PagedListResDto pagedList(TbuserDto.PagedListReqDto param);
     List<TbuserDto.DetailResDto> scrollList(TbuserDto.ScrollListReqDto param);

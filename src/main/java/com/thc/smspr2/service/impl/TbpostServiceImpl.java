@@ -101,13 +101,13 @@ public class TbpostServiceImpl implements TbpostService {
         selectResDto.setTbpostfiles(
                 tbpostfileService.list(TbpostfileDto.ListReqDto.builder().tbpostId(selectResDto.getId()).build())
         );
-
+        /*
         //좋아요 했는지 안했는지 좀 확인해보자!
-        if(param.getTbuserId() != null){
-            boolean liked = tbpostlikeService.exist(TbpostlikeDto.CreateReqDto.builder().tbpostId(selectResDto.getId()).tbuserId(param.getTbuserId()).build());
+        if(param.getReqTbuserId() != null){
+            boolean liked = tbpostlikeService.exist(TbpostlikeDto.CreateReqDto.builder().tbpostId(selectResDto.getId()).tbuserId(param.getReqTbuserId()).build());
             selectResDto.setLiked(liked);
         }
-
+        */
         return selectResDto;
     }
 
@@ -129,7 +129,8 @@ public class TbpostServiceImpl implements TbpostService {
     public List<TbpostDto.DetailResDto> detailList(List<TbpostDto.DetailResDto> list, String tbuserId){
         List<TbpostDto.DetailResDto> newList = new ArrayList<>();
         for(TbpostDto.DetailResDto each : list){
-            newList.add(get(DefaultDto.DetailReqDto.builder().id(each.getId()).tbuserId(tbuserId).build()));
+            //newList.add(get(DefaultDto.DetailReqDto.builder().id(each.getId()).tbuserId(tbuserId).build()));
+            newList.add(get(DefaultDto.DetailReqDto.builder().id(each.getId()).build()));
         }
         return newList;
     }

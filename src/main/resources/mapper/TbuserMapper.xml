@@ -17,7 +17,7 @@
 			,tbuser.modified_at as modifiedAt
 
 			,tbuser.username
-			,tbuser.password
+			/*,tbuser.password*/
 			,tbuser.name
 			,tbuser.nick
 			,tbuser.phone
