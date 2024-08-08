@@ -5,6 +5,7 @@ import com.thc.smspr2.dto.DefaultDto;
 import com.thc.smspr2.dto.TbpostDto;
 import com.thc.smspr2.dto.TbpostfileDto;
 import com.thc.smspr2.dto.TbpostlikeDto;
+import com.thc.smspr2.exception.NoAuthorizationException;
 import com.thc.smspr2.mapper.TbpostMapper;
 import com.thc.smspr2.repository.TbpostRepository;
 import com.thc.smspr2.service.TbpostService;
@@ -37,7 +38,10 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     @Override
-    public TbpostDto.CreateResDto create(TbpostDto.CreateReqDto param){
+    public TbpostDto.CreateResDto create(TbpostDto.CreateServDto param){
+        //사용자 정보 강제 입력
+        param.setTbuserId(param.getReqTbuserId());
+
         TbpostDto.CreateResDto createResDto = tbpostRepository.save(param.toEntity()).toCreateResDto();
 
         for(int i=0;i<param.getTbpostfileUrls().size();i++){
@@ -54,8 +58,12 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     @Override
-    public TbpostDto.CreateResDto update(TbpostDto.UpdateReqDto param){
+    public TbpostDto.CreateResDto update(TbpostDto.UpdateServDto param){
         Tbpost tbpost = tbpostRepository.findById(param.getId()).orElseThrow(()->new RuntimeException("no data"));
+        if(!param.isAdmin() && !tbpost.getTbuserId().equals(param.getReqTbuserId())){
+            throw new NoAuthorizationException("no auth");
+        }
+
         if(param.getDeleted() != null){
             tbpost.setDeleted(param.getDeleted());
         }
@@ -63,9 +71,9 @@ public class TbpostServiceImpl implements TbpostService {
             tbpost.setProcess(param.getProcess());
         }
 
-        if(param.getTbuserId() != null){
+        /*if(param.getTbuserId() != null){
             tbpost.setTbuserId(param.getTbuserId());
-        }
+        }*/
         if(param.getTitle() != null){
             tbpost.setTitle(param.getTitle());
         }
@@ -82,7 +90,7 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     @Override
-    public TbpostDto.DetailResDto detail(DefaultDto.DetailReqDto param){
+    public TbpostDto.DetailResDto detail(DefaultDto.DetailServDto param){
         TbpostDto.DetailResDto selectResDto = get(param);
 
         int countread = selectResDto.getCountread();
@@ -90,24 +98,23 @@ public class TbpostServiceImpl implements TbpostService {
         tbpost.setCountread(++countread);
         tbpostRepository.save(tbpost);
 
-        //update(TbpostDto.UpdateReqDto.builder().id(selectResDto.getId()).countread(++countread).build());
+        //조회수 업데이트!!
+        update(TbpostDto.UpdateServDto.builder().id(selectResDto.getId()).countread(++countread).isAdmin(true).build());
         return selectResDto;
     }
 
-    public TbpostDto.DetailResDto get(DefaultDto.DetailReqDto param){
+    public TbpostDto.DetailResDto get(DefaultDto.DetailServDto param){
         TbpostDto.DetailResDto selectResDto = tbpostMapper.detail(param);
         System.out.println(param.getId());
         if(selectResDto == null){ throw new RuntimeException("no data"); }
         selectResDto.setTbpostfiles(
                 tbpostfileService.list(TbpostfileDto.ListReqDto.builder().tbpostId(selectResDto.getId()).build())
         );
-        /*
         //좋아요 했는지 안했는지 좀 확인해보자!
         if(param.getReqTbuserId() != null){
             boolean liked = tbpostlikeService.exist(TbpostlikeDto.CreateReqDto.builder().tbpostId(selectResDto.getId()).tbuserId(param.getReqTbuserId()).build());
             selectResDto.setLiked(liked);
         }
-        */
         return selectResDto;
     }
 
@@ -130,7 +137,7 @@ public class TbpostServiceImpl implements TbpostService {
         List<TbpostDto.DetailResDto> newList = new ArrayList<>();
         for(TbpostDto.DetailResDto each : list){
             //newList.add(get(DefaultDto.DetailReqDto.builder().id(each.getId()).tbuserId(tbuserId).build()));
-            newList.add(get(DefaultDto.DetailReqDto.builder().id(each.getId()).build()));
+            newList.add(get(DefaultDto.DetailServDto.builder().id(each.getId()).build()));
         }
         return newList;
     }

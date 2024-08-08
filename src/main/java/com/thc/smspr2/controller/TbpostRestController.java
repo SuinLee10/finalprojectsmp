@@ -2,6 +2,7 @@ package com.thc.smspr2.controller;
 
 import com.thc.smspr2.dto.DefaultDto;
 import com.thc.smspr2.dto.TbpostDto;
+import com.thc.smspr2.security.PrincipalDetails;
 import com.thc.smspr2.service.TbpostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,8 +39,12 @@ public class TbpostRestController {
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbpostDto.CreateResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
+    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("permitAll()")
     @PostMapping("")
-    public ResponseEntity<TbpostDto.CreateResDto> create(@Valid @RequestBody TbpostDto.CreateReqDto param, HttpServletRequest request){
+    public ResponseEntity<TbpostDto.CreateResDto> create(@Valid @RequestBody TbpostDto.CreateReqDto param, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        logger.info("tbuserId : " + principalDetails.getTbuser().getId());
+        /*
         String reqTbuserId = request.getAttribute("reqTbuserId") + "";
         //인터셉터에서 토큰이 없었을 경우!
         if (request.getAttribute("reqTbuserId") == null) {
@@ -46,8 +53,14 @@ public class TbpostRestController {
         }
         //
         param.setTbuserId(reqTbuserId);
+        */
+        //param.setTbuserId(principalDetails.getTbuser().getId());
+        //TbpostDto.CreateServDto newParam2 = TbpostDto.CreateServDto.builder().tbuserId(principalDetails.getTbuser().getId()).title(param.getTitle()).content(param.getContent()).build();
+        //TbpostDto.CreateServDto newParam = (TbpostDto.CreateServDto) param.afterBuild(param);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(tbpostService.create(param));
+        TbpostDto.CreateServDto newParam = (TbpostDto.CreateServDto) TbpostDto.CreateServDto.builder().reqTbuserId(principalDetails.getTbuser().getId()).isAdmin(false).build().afterBuild(param);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(tbpostService.create(newParam));
     }
 
 
@@ -57,9 +70,12 @@ public class TbpostRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.CreateResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("")
-    public ResponseEntity<TbpostDto.CreateResDto> update(@Valid @RequestBody TbpostDto.UpdateReqDto param){
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.update(param));
+    public ResponseEntity<TbpostDto.CreateResDto> update(@Valid @RequestBody TbpostDto.UpdateReqDto param, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        TbpostDto.UpdateServDto newParam = (TbpostDto.UpdateServDto) TbpostDto.UpdateServDto.builder().reqTbuserId(principalDetails.getTbuser().getId()).isAdmin(false).build().afterBuild(param);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.update(newParam));
     }
 
     @Operation(summary = "게시글 상세 조회",
@@ -68,9 +84,14 @@ public class TbpostRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.DetailResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
+    @PreAuthorize("permitAll()")
     @GetMapping("")
-    public ResponseEntity<TbpostDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param){
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(param));
+    public ResponseEntity<TbpostDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String reqTbuserId = null;
+        if(principalDetails != null && principalDetails.getTbuser() != null){ reqTbuserId = principalDetails.getTbuser().getId(); }
+        DefaultDto.DetailServDto newParam = (DefaultDto.DetailServDto) DefaultDto.DetailServDto.builder().reqTbuserId(reqTbuserId).isAdmin(false).build().afterBuild(param);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(newParam));
     }
     @Operation(summary = "게시글 목록 전체 조회",
             description = "게시글 목록 전체 조회 컨트롤러 <br />"

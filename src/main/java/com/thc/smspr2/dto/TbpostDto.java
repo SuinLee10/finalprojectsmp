@@ -12,19 +12,13 @@ import java.util.List;
 
 public class TbpostDto {
 
-    @Builder
+    @SuperBuilder
     @Schema
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CreateReqDto{
-        //사용자에게 입력 받는 값이 아닙니다!! 주의!!
-        @Schema(description = "tbuserId", example="")
-        /*@NotNull
-        @NotEmpty*/
-        private String tbuserId;
-
+    public static class CreateReqDto extends DefaultDto.BaseDto {
         @Schema(description = "title", example="")
         @NotNull
         @NotEmpty
@@ -38,9 +32,21 @@ public class TbpostDto {
         private List<String> tbpostfileTypes;
         @Schema(description = "tbpostfileUrls", example="")
         private List<String> tbpostfileUrls;
+    }
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CreateServDto extends CreateReqDto{
+        private String reqTbuserId;
+        private boolean isAdmin;
+
+        private String tbuserId;
 
         public Tbpost toEntity(){
-            return Tbpost.of(tbuserId, title, content);
+            return Tbpost.of(getTbuserId(), getTitle(), getContent());
         }
     }
     @Builder
@@ -59,8 +65,8 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UpdateReqDto extends DefaultDto.UpdateReqDto{
-        @Schema(description = "tbuserId", example="")
-        private String tbuserId;
+        /*@Schema(description = "tbuserId", example="")
+        private String tbuserId;*/
 
         @Schema(description = "title", example="")
         @Size(max=400)
@@ -72,6 +78,19 @@ public class TbpostDto {
         @Schema(description = "countread", example="")
         private Integer countread;
         */
+    }
+
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateServDto extends UpdateReqDto{
+        private String reqTbuserId;
+        private boolean isAdmin;
+
+        private Integer countread;
     }
 
     //여기는 빌더 붙이면 에러 나요!! 조심!!

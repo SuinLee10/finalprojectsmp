@@ -306,6 +306,10 @@ content :
         $.ajax({
             url: "/api/tbpost",
             type: "PUT",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+            },
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({
                 id : $("#detail_tbpost_id").val()
