@@ -23,7 +23,7 @@ public class DefaultDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class BaseDto {
-        String empty;
+        String empty; // 이게 없으면 빌더가 잘 안되어요 ㅠㅠ
         public BaseDto afterBuild(BaseDto param) {
             //param => reqDto 를 넣어주면!!
             BeanUtils.copyProperties(param, this);
