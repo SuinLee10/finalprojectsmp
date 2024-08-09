@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface TbpostMapper {
-    TbpostDto.DetailResDto detail(DefaultDto.DetailReqDto param);
-    List<TbpostDto.DetailResDto> list(TbpostDto.ListReqDto param);
+    TbpostDto.DetailResDto detail(DefaultDto.DetailServDto param);
+    List<TbpostDto.DetailResDto> list(TbpostDto.ListServDto param);
 
-    List<TbpostDto.DetailResDto> scrollList(TbpostDto.ScrollListReqDto param);
-    List<TbpostDto.DetailResDto> pagedList(TbpostDto.PagedListReqDto param);
-    int pagedListCount(TbpostDto.PagedListReqDto param);
+    List<TbpostDto.DetailResDto> scrollList(TbpostDto.ScrollListServDto param);
+    List<TbpostDto.DetailResDto> pagedList(TbpostDto.PagedListServDto param);
+    int pagedListCount(TbpostDto.PagedListServDto param);
 }

@@ -110,14 +110,14 @@ public class AuthServiceImpl implements AuthService {
 	 *  
 	 */
 	@Override
-	public JwtTokenDto issueAccessToken(String refreshToken) throws JWTVerificationException {
+	public String issueAccessToken(String refreshToken) throws JWTVerificationException {
 		// Refresh Token 검증(실패시 throws JWTVerificationException)
 		//System.out.println("refresh : " +refreshToken);
 		String tbuserId = verifyRefreshToken(refreshToken);
 		// Access Token 생성
 		String accessToken = createAccessToken(tbuserId);
 		
-		return JwtTokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+		return accessToken;
 	}
 
 }

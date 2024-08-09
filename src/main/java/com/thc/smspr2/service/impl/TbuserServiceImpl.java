@@ -261,8 +261,10 @@ public class TbuserServiceImpl implements TbuserService {
     }
     @Override
     public DefaultDto.PagedListResDto pagedList(TbuserDto.PagedListReqDto param) {
-        int[] res = param.init(tbuserMapper.pagedListCount(param));
-        return param.afterBuild(res, detailList(tbuserMapper.pagedList(param)));
+        /*int[] res = param.init(tbuserMapper.pagedListCount(param));
+        return param.afterBuild(res, detailList(tbuserMapper.pagedList(param)));*/
+
+        return null;
     }
     @Override
     public List<TbuserDto.DetailResDto> scrollList(TbuserDto.ScrollListReqDto param){

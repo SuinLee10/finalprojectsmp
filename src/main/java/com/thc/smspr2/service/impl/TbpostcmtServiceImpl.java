@@ -70,8 +70,9 @@ public class TbpostcmtServiceImpl implements TbpostcmtService {
     }
     @Override
     public DefaultDto.PagedListResDto pagedList(TbpostcmtDto.PagedListReqDto param) {
-        int[] res = param.init(tbpostcmtMapper.pagedListCount(param));
-        return param.afterBuild(res, detailList(tbpostcmtMapper.pagedList(param)));
+        /*int[] res = param.init(tbpostcmtMapper.pagedListCount(param));
+        return param.afterBuild(res, detailList(tbpostcmtMapper.pagedList(param)));*/
+        return null;
     }
     @Override
     public List<TbpostcmtDto.DetailResDto> scrollList(TbpostcmtDto.ScrollListReqDto param){

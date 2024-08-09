@@ -50,7 +50,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			chain.doFilter(request, response);
 			return;
 		}
-		String accessToken = jwtHeader.replace(externalProperties.getTokenPrefix(), "");
+		//String accessToken = jwtHeader.replace(externalProperties.getTokenPrefix(), "");
+		String accessToken = jwtHeader.substring(12);
 		String tbuserId = authService.verifyAccessToken(accessToken);
 		System.out.println("tbuserId : " + tbuserId);
 

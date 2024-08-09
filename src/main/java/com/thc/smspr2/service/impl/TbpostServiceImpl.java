@@ -1,10 +1,7 @@
 package com.thc.smspr2.service.impl;
 
 import com.thc.smspr2.domain.Tbpost;
-import com.thc.smspr2.dto.DefaultDto;
-import com.thc.smspr2.dto.TbpostDto;
-import com.thc.smspr2.dto.TbpostfileDto;
-import com.thc.smspr2.dto.TbpostlikeDto;
+import com.thc.smspr2.dto.*;
 import com.thc.smspr2.exception.NoAuthorizationException;
 import com.thc.smspr2.mapper.TbpostMapper;
 import com.thc.smspr2.repository.TbpostRepository;
@@ -88,6 +85,21 @@ public class TbpostServiceImpl implements TbpostService {
         tbpostRepository.save(tbpost);
         return tbpost.toCreateResDto();
     }
+    public TbpostDto.CreateResDto delete(DefaultDto.DeleteServDto param){
+        TbpostDto.UpdateServDto newParam = TbpostDto.UpdateServDto.builder().id(param.getId()).deleted("Y").reqTbuserId(param.getReqTbuserId()).build();
+        return update(newParam);
+    }
+    public TbpostDto.CreateResDto deletes(DefaultDto.DeletesServDto param){
+        int count = 0;
+        for(String each : param.getIds()){
+            TbpostDto.UpdateServDto newParam = TbpostDto.UpdateServDto.builder().id(each).deleted("Y").reqTbuserId(param.getReqTbuserId()).build();
+            TbpostDto.CreateResDto result = update(newParam);
+            if(!(result.getId()).isEmpty()) {
+                count++;
+            }
+        }
+        return TbpostDto.CreateResDto.builder().id(count + "").build();
+    }
 
     @Override
     public TbpostDto.DetailResDto detail(DefaultDto.DetailServDto param){
@@ -119,25 +131,24 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     @Override
-    public List<TbpostDto.DetailResDto> list(TbpostDto.ListReqDto param){
-        return detailList(tbpostMapper.list(param), null);
+    public List<TbpostDto.DetailResDto> list(TbpostDto.ListServDto param){
+        return detailList(tbpostMapper.list(param), DefaultDto.DetailServDto.builder().reqTbuserId(param.getReqTbuserId()).isAdmin(param.isAdmin()).build());
     }
     @Override
-    public DefaultDto.PagedListResDto pagedList(TbpostDto.PagedListReqDto param){
+    public DefaultDto.PagedListResDto pagedList(TbpostDto.PagedListServDto param){
         int[] returnSize = param.init(tbpostMapper.pagedListCount(param));
-        return param.afterBuild(returnSize, detailList(tbpostMapper.pagedList(param), null));
+        return param.afterBuild(returnSize, detailList(tbpostMapper.pagedList(param), DefaultDto.DetailServDto.builder().reqTbuserId(param.getReqTbuserId()).isAdmin(param.isAdmin()).build()));
     }
     @Override
-    public List<TbpostDto.DetailResDto> scrollList(TbpostDto.ScrollListReqDto param){
+    public List<TbpostDto.DetailResDto> scrollList(TbpostDto.ScrollListServDto param){
         param.init();
-        return detailList(tbpostMapper.scrollList(param), param.getTbuserId());
+        return detailList(tbpostMapper.scrollList(param), DefaultDto.DetailServDto.builder().reqTbuserId(param.getReqTbuserId()).isAdmin(param.isAdmin()).build());
     }
     //
-    public List<TbpostDto.DetailResDto> detailList(List<TbpostDto.DetailResDto> list, String tbuserId){
+    public List<TbpostDto.DetailResDto> detailList(List<TbpostDto.DetailResDto> list, DefaultDto.DetailServDto param){
         List<TbpostDto.DetailResDto> newList = new ArrayList<>();
         for(TbpostDto.DetailResDto each : list){
-            //newList.add(get(DefaultDto.DetailReqDto.builder().id(each.getId()).tbuserId(tbuserId).build()));
-            newList.add(get(DefaultDto.DetailServDto.builder().id(each.getId()).build()));
+            newList.add(get(DefaultDto.DetailServDto.builder().id(each.getId()).reqTbuserId(param.getReqTbuserId()).isAdmin(param.isAdmin()).build()));
         }
         return newList;
     }

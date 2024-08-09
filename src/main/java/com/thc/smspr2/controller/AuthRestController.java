@@ -1,7 +1,6 @@
 package com.thc.smspr2.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.thc.smspr2.security.JwtTokenDto;
 import com.thc.smspr2.security.AuthService;
 import com.thc.smspr2.security.ExternalProperties;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,17 +38,17 @@ public class AuthRestController {
 		ResponseEntity<String> responseEntity = null;
 		String refreshToken = (String) request.getHeader(externalProperties.getRefreshKey());
 		System.out.println("refreshToken: " + refreshToken);
-		if(refreshToken == null || refreshToken.isEmpty() || !refreshToken.startsWith(externalProperties.getTokenPrefix())) {
+		if(refreshToken == null || !refreshToken.startsWith(externalProperties.getTokenPrefix())) {
 			// 헤더에 Refresh Token 없으면 return 406
 			responseEntity = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 		} else {
 			try {
-				refreshToken = refreshToken.substring(12, refreshToken.length());
+				refreshToken = refreshToken.substring(12);
 				// 쿠키에 Refresh Token 있으면 검증 후 Access token 발급.
-				JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
+				String accessToken = authService.issueAccessToken(refreshToken);
 				// Access Token 발급 완료.
 				// Access Token은 response header에 set.
-				response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + jwtTokenDto.getAccessToken());
+				response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + accessToken);
 				
 				// return 200(OK).
 				responseEntity = ResponseEntity.status(HttpStatus.OK).build();

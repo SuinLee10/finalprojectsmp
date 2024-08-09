@@ -36,13 +36,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		Authentication authentication = null;
 		TbuserDto.LoginReqDto tbuserLoginDto = null;
+
+		//1번. 로그인에 필요한 아이디(username)이랑 비번(password)가 있는지 먼저 확인!!!
 		try {
 			tbuserLoginDto = objectMapper.readValue(request.getInputStream(), TbuserDto.LoginReqDto.class);
 		} catch (IOException e) {
 			System.out.println("1. login attemptAuthentication : Not Enough Parameters?!");
 			//e.printStackTrace();
 		}
-		
+
+		//1번. 로그인에 필요한 아이디(username)이랑 비번(password)으로 실제 존재하는 고객인지 확인!!!
+		//=> 그 정보로 Authentication 객체를 만들꺼에요!!!
 		try {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(tbuserLoginDto.getUsername(), tbuserLoginDto.getPassword());
 			authentication = authenticationManager.authenticate(authenticationToken);
@@ -64,11 +68,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// TbuserId로 리프레시토큰 발급
 		System.out.println("principalDetails.getTbuser().getId() : " + principalDetails.getTbuser().getId());
 		String refreshToken = authService.createRefreshToken(principalDetails.getTbuser().getId());
-		JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
+		String accessToken = authService.issueAccessToken(refreshToken);
 
 		// header에 담아서 전달!!
 		response.addHeader(externalProperties.getRefreshKey(), externalProperties.getTokenPrefix() + refreshToken);
-		response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + jwtTokenDto.getAccessToken());
+		response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + accessToken);
 		// 바디에도 담아줍시다.
 		//TbuserDto.TbuserLoginDto tbuserLoginDto = new TbuserDto.TbuserLoginDto(externalProperties.getTokenPrefix() + refreshToken, externalProperties.getTokenPrefix() + accessToken);
 		//response.getWriter().write(tbuserLoginDto.toString());

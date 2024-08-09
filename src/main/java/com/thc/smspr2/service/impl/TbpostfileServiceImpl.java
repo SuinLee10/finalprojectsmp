@@ -70,8 +70,9 @@ public class TbpostfileServiceImpl implements TbpostfileService {
     }
     @Override
     public DefaultDto.PagedListResDto pagedList(TbpostfileDto.PagedListReqDto param) {
-        int[] res = param.init(tbpostfileMapper.pagedListCount(param));
-        return param.afterBuild(res, detailList(tbpostfileMapper.pagedList(param)));
+        /*int[] res = param.init(tbpostfileMapper.pagedListCount(param));
+        return param.afterBuild(res, detailList(tbpostfileMapper.pagedList(param)));*/
+        return null;
     }
     @Override
     public List<TbpostfileDto.DetailResDto> scrollList(TbpostfileDto.ScrollListReqDto param){

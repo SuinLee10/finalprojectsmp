@@ -85,8 +85,9 @@ public class TbpostlikeServiceImpl implements TbpostlikeService {
     }
     @Override
     public DefaultDto.PagedListResDto pagedList(TbpostlikeDto.PagedListReqDto param) {
-        int[] res = param.init(tbpostlikeMapper.pagedListCount(param));
-        return param.afterBuild(res, detailList(tbpostlikeMapper.pagedList(param)));
+        /*int[] res = param.init(tbpostlikeMapper.pagedListCount(param));
+        return param.afterBuild(res, detailList(tbpostlikeMapper.pagedList(param)));*/
+        return null;
     }
     @Override
     public List<TbpostlikeDto.DetailResDto> scrollList(TbpostlikeDto.ScrollListReqDto param){

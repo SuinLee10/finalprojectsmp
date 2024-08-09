@@ -7,6 +7,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
+
 public class DefaultDto {
     @Builder
     @Schema
@@ -58,15 +60,56 @@ public class DefaultDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class DeleteReqDto extends BaseDto {
+        @Schema(description = "id", example="")
+        @NotNull
+        @NotEmpty
+        private String id;
+    }
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DeleteServDto extends DeleteReqDto {
+        @Schema(description = "isAdmin", example="")
+        private boolean isAdmin;
+        @Schema(description = "reqTbuserId", example="")
+        private String reqTbuserId;
+    }
+
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DeletesReqDto extends BaseDto {
+        @Schema(description = "ids", example="")
+        private List<String> ids;
+    }
+    @SuperBuilder
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DeletesServDto extends DeletesReqDto {
+        private String reqTbuserId;
+        private boolean isAdmin;
+    }
+
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class DetailReqDto extends BaseDto {
         @Schema(description = "id", example="")
         @NotNull
         @NotEmpty
         private String id;
-        /*
-        //이거는 로그인 한 사람이 쓰는 정보
-        @Schema(description = "tbuserId", example="")
-        private String tbuserId;*/
     }
 
     @SuperBuilder
@@ -110,6 +153,10 @@ public class DefaultDto {
         private String deleted;
         @Schema(description = "process", example="")
         private String process;
+        @Schema(description = "sdate", example="")
+        private String sdate;
+        @Schema(description = "fdate", example="")
+        private String fdate;
     }
 
     @SuperBuilder
@@ -129,51 +176,58 @@ public class DefaultDto {
         @Schema(description = "orderway", example="")
         private String orderway;
 
-        //원래는 고객한테 받으면 안되는 정보!
-        @Schema(description = "offset", example="")
-        private Integer offset;
-
         @Schema(description = "deleted", example="")
         private String deleted;
         @Schema(description = "process", example="")
         private String process;
+        @Schema(description = "sdate", example="")
+        private String sdate;
+        @Schema(description = "fdate", example="")
+        private String fdate;
+    }
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PagedListServDto extends PagedListReqDto {
+        @Schema(description = "offset", example="")
+        private Integer offset;
 
         public int[] init(int listsize){
-            if(orderby == null || orderby.isEmpty()){
-                orderby = "created_at";
+            if(getOrderby() == null || getOrderby().isEmpty()){
+                setOrderby("created_at");
             }
-            if(orderway == null || orderway.isEmpty()){
-                orderway = "desc";
+            if(getOrderway() == null || getOrderway().isEmpty()){
+                setOrderway("desc");
             }
-            if(perpage == null || perpage < 1){
+            if(getPerpage() == null || getPerpage()  < 1){
                 //한번에 조회할 글 갯수
-                perpage = 10;
+                setPerpage(10);
             }
-            if(callpage == null){
+            if(getCallpage() == null || getCallpage() < 1){
                 //호출하는 페이지
-                callpage = 1;
-            }
-            if(callpage < 1){
-                callpage = 1;
+                setCallpage(1);
             }
 
-            int pagesize = listsize / perpage;
-            if(listsize % perpage > 0){
+            int pagesize = listsize / getPerpage();
+            if(listsize % getPerpage() > 0){
                 pagesize++;
             }
-            if(callpage > pagesize){
-                callpage = pagesize;
+            if(getCallpage() > pagesize){
+                setCallpage(pagesize);
             }
-            offset = (callpage - 1) * perpage;
+            offset = (getCallpage() - 1) * getPerpage();
             int[] res = {listsize, pagesize};
             return res;
         }
         public PagedListResDto afterBuild(int[] resSize, Object list){
             return PagedListResDto.builder()
-                    .callpage(callpage)
-                    .perpage(perpage)
-                    .orderby(orderby)
-                    .orderway(orderway)
+                    .callpage(getCallpage())
+                    .perpage(getPerpage())
+                    .orderby(getOrderby())
+                    .orderway(getOrderway())
                     .listsize(resSize[0])
                     .pagesize(resSize[1])
                     .list(list)
@@ -228,6 +282,10 @@ public class DefaultDto {
         private String deleted;
         @Schema(description = "process", example="")
         private String process;
+        @Schema(description = "sdate", example="")
+        private String sdate;
+        @Schema(description = "fdate", example="")
+        private String fdate;
 
         //이거는 로그인 한 사람이 쓰는 정보
         @Schema(description = "tbuserId", example="")

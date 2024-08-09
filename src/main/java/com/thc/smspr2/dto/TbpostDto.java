@@ -134,6 +134,16 @@ public class TbpostDto {
         @Schema(description = "title", example="")
         private String title;
     }
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ListServDto extends ListReqDto{
+        private String reqTbuserId;
+        private boolean isAdmin;
+    }
 
     @SuperBuilder
     @Schema
@@ -142,6 +152,21 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PagedListReqDto extends DefaultDto.PagedListReqDto{
+        @Schema(description = "tbuserId", example="")
+        private String tbuserId;
+        @Schema(description = "title", example="")
+        private String title;
+    }
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PagedListServDto extends DefaultDto.PagedListServDto{
+        private String reqTbuserId;
+        private boolean isAdmin;
+
         @Schema(description = "tbuserId", example="")
         private String tbuserId;
         @Schema(description = "title", example="")
@@ -159,6 +184,16 @@ public class TbpostDto {
         private String tbuserId;
         @Schema(description = "title", example="")
         private String title;
+    }
+    @SuperBuilder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ScrollListServDto extends ScrollListReqDto{
+        private String reqTbuserId;
+        private boolean isAdmin;
     }
 
 }
