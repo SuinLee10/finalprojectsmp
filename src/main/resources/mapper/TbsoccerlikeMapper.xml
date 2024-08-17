@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.smspr2.mapper.TbsoccerlikeMapper">
+
+	<!---->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbsoccerlikeDto$DetailResDto">
+		SELECT tbsoccerlike.id
+			,tbsoccerlike.deleted
+			,tbsoccerlike.process
+			,tbsoccerlike.created_at as createdAt
+			,tbsoccerlike.modified_at as modifiedAt
+
+		    ,tbsoccerlike.tbsoccer_id as tbsoccerId
+			,tbsoccerlike.tbuser_id as tbuserId
+			,tbsoccerlike.content
+
+		FROM tbsoccerlike
+		WHERE tbsoccerlike.id = #{id}
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbsoccerlikeDto$DetailResDto">
+		SELECT tbsoccerlike.id
+		FROM tbsoccerlike
+		WHERE tbsoccerlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbsoccerlike.deleted = #{deleted}</if>
+		<if test = "tbsoccerId != null and tbsoccerId !=''">AND tbsoccerlike.tbsoccer_id = #{tbsoccerId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbsoccerlike.tbuser_id = #{tbuserId}</if>
+		ORDER BY tbsoccerlike.created_at DESC
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbsoccerlikeDto$DetailResDto">
+		SELECT tbsoccerlike.id
+		FROM tbsoccerlike
+		WHERE tbsoccerlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbsoccerlike.deleted = #{deleted}</if>
+		<if test = "tbsoccerId != null and tbsoccerId !=''">AND tbsoccerlike.tbsoccer_id = #{tbsoccerId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbsoccerlike.tbuser_id = #{tbuserId}</if>
+
+		<if test = "orderby =='created_at'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbsoccerlike.created_at </if>
+				ORDER BY tbsoccerlike.created_at DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbsoccerlike.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+				ORDER BY tbsoccerlike.created_at ASC
+			</if>
+		</if>
+		<if test = "orderby =='tbuserId'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND #{cursor} > tbsoccerlike.tbuserId</if>
+				ORDER BY tbsoccerlike.tbuserId DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbsoccerlike.tbuserId > #{cursor}</if>
+				ORDER BY tbsoccerlike.tbuserId ASC
+			</if>
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbsoccerlikeDto$DetailResDto">
+		SELECT tbsoccerlike.id
+		FROM tbsoccerlike
+		WHERE tbsoccerlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbsoccerlike.deleted = #{deleted}</if>
+		<if test = "tbsoccerId != null and tbsoccerId !=''">AND tbsoccerlike.tbsoccer_id = #{tbsoccerId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbsoccerlike.tbuser_id = #{tbuserId}</if>
+
+		<if test = "orderby =='created_at'">ORDER BY tbsoccerlike.created_at </if>
+		<if test = "orderby =='tbuserId'">ORDER BY tbsoccerlike.tbuserId </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(tbsoccerlike.id) as listsize
+		FROM tbsoccerlike
+		WHERE tbsoccerlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbsoccerlike.deleted = #{deleted}</if>
+		<if test = "tbsoccerId != null and tbsoccerId !=''">AND tbsoccerlike.tbsoccer_id = #{tbsoccerId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbsoccerlike.tbuser_id = #{tbuserId}</if>
+	</select>
+
+</mapper>

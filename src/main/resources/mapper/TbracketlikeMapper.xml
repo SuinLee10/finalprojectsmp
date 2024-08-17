@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.smspr2.mapper.TbracketlikeMapper">
+
+	<!---->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketlikeDto$DetailResDto">
+		SELECT tbracketlike.id
+			,tbracketlike.deleted
+			,tbracketlike.process
+			,tbracketlike.created_at as createdAt
+			,tbracketlike.modified_at as modifiedAt
+
+		    ,tbracketlike.tbracket_id as tbracketId
+			,tbracketlike.tbuser_id as tbuserId
+			,tbracketlike.content
+
+		FROM tbracketlike
+		WHERE tbracketlike.id = #{id}
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketlikeDto$DetailResDto">
+		SELECT tbracketlike.id
+		FROM tbracketlike
+		WHERE tbracketlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketlike.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketlike.tbracket_id = #{tbracketId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracketlike.tbuser_id = #{tbuserId}</if>
+		ORDER BY tbracketlike.created_at DESC
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketlikeDto$DetailResDto">
+		SELECT tbracketlike.id
+		FROM tbracketlike
+		WHERE tbracketlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketlike.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketlike.tbracket_id = #{tbracketId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracketlike.tbuser_id = #{tbuserId}</if>
+
+		<if test = "orderby =='created_at'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbracketlike.created_at </if>
+				ORDER BY tbracketlike.created_at DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbracketlike.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+				ORDER BY tbracketlike.created_at ASC
+			</if>
+		</if>
+		<if test = "orderby =='tbuserId'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND #{cursor} > tbracketlike.tbuserId</if>
+				ORDER BY tbracketlike.tbuserId DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbracketlike.tbuserId > #{cursor}</if>
+				ORDER BY tbracketlike.tbuserId ASC
+			</if>
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketlikeDto$DetailResDto">
+		SELECT tbracketlike.id
+		FROM tbracketlike
+		WHERE tbracketlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketlike.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketlike.tbracket_id = #{tbracketId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracketlike.tbuser_id = #{tbuserId}</if>
+
+		<if test = "orderby =='created_at'">ORDER BY tbracketlike.created_at </if>
+		<if test = "orderby =='tbuserId'">ORDER BY tbracketlike.tbuserId </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(tbracketlike.id) as listsize
+		FROM tbracketlike
+		WHERE tbracketlike.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketlike.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketlike.tbracket_id = #{tbracketId}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracketlike.tbuser_id = #{tbuserId}</if>
+	</select>
+
+</mapper>

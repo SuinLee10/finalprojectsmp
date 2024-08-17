@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.smspr2.mapper.TbracketfileMapper">
+
+	<!---->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketfileDto$DetailResDto">
+		SELECT tbracketfile.id
+			,tbracketfile.deleted
+			,tbracketfile.process
+			,tbracketfile.created_at as createdAt
+			,tbracketfile.modified_at as modifiedAt
+
+		    ,tbracketfile.tbracket_id as tbracketId
+			,tbracketfile.type
+			,tbracketfile.url
+
+		FROM tbracketfile
+		WHERE tbracketfile.id = #{id}
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketfileDto$DetailResDto">
+		SELECT tbracketfile.id
+		FROM tbracketfile
+		WHERE tbracketfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketfile.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketfile.tbracket_id = #{tbracketId}</if>
+		<if test = "type != null and type !=''">AND tbracketfile.type = #{type}</if>
+		ORDER BY tbracketfile.created_at DESC
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketfileDto$DetailResDto">
+		SELECT tbracketfile.id
+		FROM tbracketfile
+		WHERE tbracketfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketfile.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketfile.tbracket_id = #{tbracketId}</if>
+		<if test = "type != null and type !=''">AND tbracketfile.type = #{type}</if>
+
+		<if test = "orderby =='created_at'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbracketfile.created_at </if>
+				ORDER BY tbracketfile.created_at DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbracketfile.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+				ORDER BY tbracketfile.created_at ASC
+			</if>
+		</if>
+		<if test = "orderby =='type'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND #{cursor} > tbracketfile.type</if>
+				ORDER BY tbracketfile.type DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbracketfile.type > #{cursor}</if>
+				ORDER BY tbracketfile.type ASC
+			</if>
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketfileDto$DetailResDto">
+		SELECT tbracketfile.id
+		FROM tbracketfile
+		WHERE tbracketfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketfile.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketfile.tbracket_id = #{tbracketId}</if>
+		<if test = "type != null and type !=''">AND tbracketfile.type = #{type}</if>
+
+		<if test = "orderby =='created_at'">ORDER BY tbracketfile.created_at </if>
+		<if test = "orderby =='type'">ORDER BY tbracketfile.type </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(tbracketfile.id) as listsize
+		FROM tbracketfile
+		WHERE tbracketfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracketfile.deleted = #{deleted}</if>
+		<if test = "tbracketId != null and tbracketId !=''">AND tbracketfile.tbracket_id = #{tbracketId}</if>
+		<if test = "type != null and type !=''">AND tbracketfile.type = #{type}</if>
+	</select>
+
+</mapper>

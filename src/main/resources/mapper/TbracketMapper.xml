@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.smspr2.mapper.TbracketMapper">
+
+	<!---->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketDto$DetailResDto">
+		SELECT tbracket.id
+			,tbracket.deleted
+			,tbracket.process
+			,tbracket.created_at as createdAt
+			,tbracket.modified_at as modifiedAt
+
+		    ,tbracket.tbuser_id as tbuserId
+			,tbracket.title
+			,tbracket.content
+			,tbracket.countread
+			,tbracket.min_participants
+		     ,tbracket.max_participants
+		     ,tbracket.female_participants
+		     ,tbracket.male_participants
+		     ,tbracket.min_school_num
+		     ,tbracket.max_school_num
+		     ,tbracket.place
+		     ,tbracket.match_date
+		     ,tbracket.start_time
+		     ,tbracket.end_time
+
+			,tbuser.name as tbuserName
+			,tbuser.nick as tbuserNick
+			,tbuser.img as tbuserImg
+
+		FROM tbracket, tbuser
+		WHERE tbracket.id = #{id}
+		  AND tbracket.tbuser_id = tbuser.id
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketDto$DetailResDto">
+		SELECT tbracket.id
+		FROM tbracket
+		WHERE tbracket.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracket.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracket.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbracket.title LIKE CONCAT('%', #{title}, '%')</if>
+		ORDER BY tbracket.created_at DESC
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketDto$DetailResDto">
+		SELECT tbracket.id
+		FROM tbracket
+		WHERE tbracket.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracket.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracket.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbracket.title LIKE CONCAT('%', #{title}, '%')</if>
+
+		<if test = "orderby =='created_at'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbracket.created_at </if>
+				ORDER BY tbracket.created_at DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbracket.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+				ORDER BY tbracket.created_at ASC
+			</if>
+		</if>
+		<if test = "orderby =='title'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND #{cursor} > tbracket.title</if>
+				ORDER BY tbracket.title DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbracket.title > #{cursor}</if>
+				ORDER BY tbracket.title ASC
+			</if>
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbracketDto$DetailResDto">
+		SELECT tbracket.id
+		FROM tbracket
+		WHERE tbracket.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracket.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracket.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbracket.title LIKE CONCAT('%', #{title}, '%')</if>
+
+		<if test = "orderby =='created_at'">ORDER BY tbracket.created_at </if>
+		<if test = "orderby =='title'">ORDER BY tbracket.title </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(tbracket.id) as listsize
+		FROM tbracket
+		WHERE tbracket.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbracket.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbracket.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbracket.title LIKE CONCAT('%', #{title}, '%')</if>
+	</select>
+
+</mapper>

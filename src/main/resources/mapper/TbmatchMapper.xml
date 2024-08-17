@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.smspr2.mapper.TbmatchMapper">
+
+	<!---->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchDto$DetailResDto">
+		SELECT tbmatch.id
+			,tbmatch.deleted
+			,tbmatch.process
+			,tbmatch.created_at as createdAt
+			,tbmatch.modified_at as modifiedAt
+
+		    ,tbmatch.tbuser_id as tbuserId
+			,tbmatch.title
+			,tbmatch.content
+			,tbmatch.countread
+			,tbmatch.min_participants
+		     ,tbmatch.max_participants
+		     ,tbmatch.female_participants
+		     ,tbmatch.male_participants
+		     ,tbmatch.min_school_num
+		     ,tbmatch.max_school_num
+		     ,tbmatch.place
+		     ,tbmatch.match_date
+		     ,tbmatch.start_time
+		     ,tbmatch.end_time
+
+			,tbuser.name as tbuserName
+			,tbuser.nick as tbuserNick
+			,tbuser.img as tbuserImg
+
+		FROM tbmatch, tbuser
+		WHERE tbmatch.id = #{id}
+		  AND tbmatch.tbuser_id = tbuser.id
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchDto$DetailResDto">
+		SELECT tbmatch.id
+		FROM tbmatch
+		WHERE tbmatch.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatch.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbmatch.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbmatch.title LIKE CONCAT('%', #{title}, '%')</if>
+		ORDER BY tbmatch.created_at DESC
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchDto$DetailResDto">
+		SELECT tbmatch.id
+		FROM tbmatch
+		WHERE tbmatch.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatch.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbmatch.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbmatch.title LIKE CONCAT('%', #{title}, '%')</if>
+
+		<if test = "orderby =='created_at'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbmatch.created_at </if>
+				ORDER BY tbmatch.created_at DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbmatch.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+				ORDER BY tbmatch.created_at ASC
+			</if>
+		</if>
+		<if test = "orderby =='title'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND #{cursor} > tbmatch.title</if>
+				ORDER BY tbmatch.title DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbmatch.title > #{cursor}</if>
+				ORDER BY tbmatch.title ASC
+			</if>
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchDto$DetailResDto">
+		SELECT tbmatch.id
+		FROM tbmatch
+		WHERE tbmatch.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatch.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbmatch.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbmatch.title LIKE CONCAT('%', #{title}, '%')</if>
+
+		<if test = "orderby =='created_at'">ORDER BY tbmatch.created_at </if>
+		<if test = "orderby =='title'">ORDER BY tbmatch.title </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(tbmatch.id) as listsize
+		FROM tbmatch
+		WHERE tbmatch.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatch.deleted = #{deleted}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbmatch.tbuser_id = #{tbuserId}</if>
+		<if test = "title != null and title !=''">AND tbmatch.title LIKE CONCAT('%', #{title}, '%')</if>
+	</select>
+
+</mapper>

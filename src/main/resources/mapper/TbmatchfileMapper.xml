@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.smspr2.mapper.TbmatchfileMapper">
+
+	<!---->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchfileDto$DetailResDto">
+		SELECT tbmatchfile.id
+			,tbmatchfile.deleted
+			,tbmatchfile.process
+			,tbmatchfile.created_at as createdAt
+			,tbmatchfile.modified_at as modifiedAt
+
+		    ,tbmatchfile.tbmatch_id as tbmatchId
+			,tbmatchfile.type
+			,tbmatchfile.url
+
+		FROM tbmatchfile
+		WHERE tbmatchfile.id = #{id}
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchfileDto$DetailResDto">
+		SELECT tbmatchfile.id
+		FROM tbmatchfile
+		WHERE tbmatchfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatchfile.deleted = #{deleted}</if>
+		<if test = "tbmatchId != null and tbmatchId !=''">AND tbmatchfile.tbmatch_id = #{tbmatchId}</if>
+		<if test = "type != null and type !=''">AND tbmatchfile.type = #{type}</if>
+		ORDER BY tbmatchfile.created_at DESC
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchfileDto$DetailResDto">
+		SELECT tbmatchfile.id
+		FROM tbmatchfile
+		WHERE tbmatchfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatchfile.deleted = #{deleted}</if>
+		<if test = "tbmatchId != null and tbmatchId !=''">AND tbmatchfile.tbmatch_id = #{tbmatchId}</if>
+		<if test = "type != null and type !=''">AND tbmatchfile.type = #{type}</if>
+
+		<if test = "orderby =='created_at'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbmatchfile.created_at </if>
+				ORDER BY tbmatchfile.created_at DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbmatchfile.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+				ORDER BY tbmatchfile.created_at ASC
+			</if>
+		</if>
+		<if test = "orderby =='type'">
+			<if test = "orderway =='desc'">
+				<if test = "cursor != null and cursor !=''">AND #{cursor} > tbmatchfile.type</if>
+				ORDER BY tbmatchfile.type DESC
+			</if>
+			<if test = "orderway =='asc'">
+				<if test = "cursor != null and cursor !=''">AND tbmatchfile.type > #{cursor}</if>
+				ORDER BY tbmatchfile.type ASC
+			</if>
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbmatchfileDto$DetailResDto">
+		SELECT tbmatchfile.id
+		FROM tbmatchfile
+		WHERE tbmatchfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatchfile.deleted = #{deleted}</if>
+		<if test = "tbmatchId != null and tbmatchId !=''">AND tbmatchfile.tbmatch_id = #{tbmatchId}</if>
+		<if test = "type != null and type !=''">AND tbmatchfile.type = #{type}</if>
+
+		<if test = "orderby =='created_at'">ORDER BY tbmatchfile.created_at </if>
+		<if test = "orderby =='type'">ORDER BY tbmatchfile.type </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(tbmatchfile.id) as listsize
+		FROM tbmatchfile
+		WHERE tbmatchfile.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND tbmatchfile.deleted = #{deleted}</if>
+		<if test = "tbmatchId != null and tbmatchId !=''">AND tbmatchfile.tbmatch_id = #{tbmatchId}</if>
+		<if test = "type != null and type !=''">AND tbmatchfile.type = #{type}</if>
+	</select>
+
+</mapper>
